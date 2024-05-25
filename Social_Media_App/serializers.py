@@ -62,3 +62,14 @@ class PostSerializer(serializers.ModelSerializer):
             'created_on',
             'updated_on',
         ]
+
+class CustomUserSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "username",
+            "profile_photo",
+        ]

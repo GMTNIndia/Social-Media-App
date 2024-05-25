@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
 from .models import CustomUser, Post
-from .serializers import CustomUserSerializer, PostSerializer, ProfilePhotoUpdateSerializer
+from .serializers import CustomUserSerializer, PostSerializer, ProfilePhotoUpdateSerializer, CustomUserSearchSerializer
 
 
 class UserCreateView(generics.CreateAPIView):
@@ -44,7 +44,7 @@ class UserSearchView(APIView):
             Q(first_name__icontains=query) | 
             Q(last_name__icontains=query)
         )
-        serializer = CustomUserSerializer(users, many=True)
+        serializer = CustomUserSearchSerializer(users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class PostViewSet(viewsets.ModelViewSet):
