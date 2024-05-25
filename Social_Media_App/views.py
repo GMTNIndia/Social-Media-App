@@ -1,5 +1,9 @@
 from rest_framework import generics, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from django.db.models import Q
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
 from .models import CustomUser, Post
 from .serializers import CustomUserSerializer, PostSerializer, ProfilePhotoUpdateSerializer
@@ -26,6 +30,22 @@ class ProfilePhotoUpdateView(generics.UpdateAPIView):
     def get_object(self):
         return self.request.user
 
+
+class UserSearchView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        query = request.query_params.get('query', None)
+        if not query:
+            return Response({"detail": "Query parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        users = CustomUser.objects.filter(
+            Q(username__icontains=query) | 
+            Q(first_name__icontains=query) | 
+            Q(last_name__icontains=query)
+        )
+        serializer = CustomUserSerializer(users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()

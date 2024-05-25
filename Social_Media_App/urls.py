@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from rest_framework.routers import DefaultRouter
-from .views import NewsFeedView, UserCreateView, UserDetailView,  PostViewSet, ProfilePhotoUpdateView
+from .views import NewsFeedView, UserCreateView, UserDetailView,  PostViewSet, ProfilePhotoUpdateView,UserSearchView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -21,6 +21,7 @@ urlpatterns = [
         ProfilePhotoUpdateView.as_view(),
         name="profile_photo_update",
     ),
+    path('api/search/', UserSearchView.as_view(), name='user-search'),
     path('api/posts/',
          PostViewSet.as_view({'post': 'create'}), name='post-create'),
     path("api/newsfeed/", NewsFeedView.as_view(), name="news_feed"),
