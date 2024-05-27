@@ -22,13 +22,13 @@ class CustomUserSerializer(serializers.ModelSerializer):
         extra_kwargs = {"password": {"write_only": True}}
 
     def validate(self, attrs):
-        if attrs.get('password') != attrs.get('confirm_password'):
+        if attrs.get("password") != attrs.get("confirm_password"):
             raise serializers.ValidationError("The passwords do not match.")
         return attrs
 
     def create(self, validated_data):
         # Remove confirm_password if it exists
-        validated_data.pop('confirm_password', None)
+        validated_data.pop("confirm_password", None)
         user = CustomUser.objects.create_user(**validated_data)
         return user
 
@@ -55,13 +55,14 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = [
-            'id',
-            'user',
-            'content',
-            'image',
-            'created_on',
-            'updated_on',
+            "id",
+            "user",
+            "content",
+            "image",
+            "created_on",
+            "updated_on",
         ]
+
 
 class CustomUserSearchSerializer(serializers.ModelSerializer):
     class Meta:
