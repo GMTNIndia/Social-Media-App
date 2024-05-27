@@ -4,12 +4,13 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from rest_framework.routers import DefaultRouter
-from .views import NewsFeedView, UserCreateView, UserDetailView,  PostViewSet, ProfilePhotoUpdateView,UserSearchView
+from .views import NewsFeedView, UserCreateView, UserDetailView,  PostViewSet, ProfilePhotoUpdateView,UserSearchView, StoryViewSet
 from django.conf import settings
 from django.conf.urls.static import static
 
 router = DefaultRouter()
 router.register(r'posts', PostViewSet)
+router.register(r'stories', StoryViewSet, basename='story')
 
 urlpatterns = [
     path("api/users/", UserCreateView.as_view(), name="user-create"),

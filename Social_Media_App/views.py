@@ -5,13 +5,15 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import CustomUser, Post
+from .models import CustomUser, Post, Story
 from .serializers import (
     CustomUserSerializer,
     PostSerializer,
     ProfilePhotoUpdateSerializer,
     CustomUserSearchSerializer,
+    StorySerializer
 )
+from django.utils import timezone
 
 
 class UserCreateView(generics.CreateAPIView):
@@ -74,3 +76,18 @@ class NewsFeedView(generics.ListAPIView):
         following_users = user.following.all()
         queryset = Post.objects.filter(user__in=following_users)
         return queryset
+    
+class StoryViewSet(viewsets.ModelViewSet):
+    queryset = Story.objects.all()
+    serializer_class = StorySerializer
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def get_queryset(self):
+        user = self.request.user
+        following_users = user.following.all()
+        now = timezone.now()
+        return Story.objects.filter(user__in=following_users, expires_on__gt=now)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

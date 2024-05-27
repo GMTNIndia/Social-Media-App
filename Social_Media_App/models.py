@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
+from django.utils import timezone
+from datetime import timedelta
 
 # Create your models here.
 
@@ -31,3 +33,16 @@ class Post(models.Model):
     image = models.ImageField(upload_to="post_images/", null=True, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
+    
+class Story(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="story_images/", null=True, blank=True)
+    video = models.FileField(upload_to="story_videos/", null=True, blank=True)
+    link = models.URLField(null=True, blank=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    expires_on = models.DateTimeField()
+
+    def save(self, *args, **kwargs):
+        if not self.expires_on:
+            self.expires_on = self.created_on + timedelta(hours=24)
+        super().save(*args, **kwargs)
