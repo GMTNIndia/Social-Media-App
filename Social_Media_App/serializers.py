@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, Post,Story
+from .models import CustomUser, Post, Story
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -66,16 +66,8 @@ class PostSerializer(serializers.ModelSerializer):
 class StorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Story
-        fields = [
-            "id",
-            "user",
-            "image",
-            "video",
-            "link",
-            "created_on",
-            "expires_on",
-        ]
-        read_only_fields = ["user", "created_on", "expires_on"]
+        fields = ['id', 'user', 'image', 'video', 'link', 'created_on', 'expires_on']
+        read_only_fields = ['user', 'created_on', 'expires_on']
 
 
 class CustomUserSearchSerializer(serializers.ModelSerializer):
