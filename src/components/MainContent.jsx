@@ -1,5 +1,5 @@
 import React from 'react';
-import manish from '../components/manish.jpg';
+import manish from './manish.jpg';
 import like from '../components/heart.png';
 import comment from '../components/chat-bubble.png';
 
