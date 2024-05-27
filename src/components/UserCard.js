@@ -1,4 +1,8 @@
 import * as React from "react";
+import img1 from "../components/images/img1.jpg";
+import img2 from "../components/images/img2.jpg";
+import img3 from "../components/images/img3.jpg";
+import img4 from "../components/images/img4.jpg";
 
 function CardProfile({ src, name, friends, posts }) {
   return (
@@ -39,26 +43,25 @@ function Trend({ hashtag, posts }) {
 
 function MyComponent({ searchTerm }) {
   const profiles = [
-    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/e505ea34f83a46156c747fa90e1a65c0be825a41e3e575d541a8a42c93e193f4?apiKey=87da4b67ae5046fdba58e532f6a97e48&", name: "Code With Stein", friends: 180, posts: 120 },
-    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/e505ea34f83a46156c747fa90e1a65c0be825a41e3e575d541a8a42c93e193f4?apiKey=87da4b67ae5046fdba58e532f6a97e48&", name: "Code With Stein", friends: 180, posts: 120 },
-    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/e505ea34f83a46156c747fa90e1a65c0be825a41e3e575d541a8a42c93e193f4?apiKey=87da4b67ae5046fdba58e532f6a97e48&", name: "Code With Stein", friends: 180, posts: 120 },
-    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/e505ea34f83a46156c747fa90e1a65c0be825a41e3e575d541a8a42c93e193f4?apiKey=87da4b67ae5046fdba58e532f6a97e48&", name: "Code With Stein", friends: 180, posts: 120 },
+    { src: img1, name: "Ashok", friends: 180, posts: 120 },
+    { src: img2, name: "Akash", friends: 180, posts: 120 },
+    { src: img3, name: "Ragvi", friends: 180, posts: 120 },
+    { src: img4, name: "Bala", friends: 180, posts: 120 },
   ];
 
   const suggestions = [
-    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/78d58aeb4a28c9dfb67dc18b5f9b974caf5abd3d716733a130d97886d83a0250?apiKey=87da4b67ae5046fdba58e532f6a97e48&", name: "Code With Stein" },
-    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/a841ce5867c96ac8444d3d0e023c96be68b8c37ea7bca0cc3df3c6aebac264cd?apiKey=87da4b67ae5046fdba58e532f6a97e48&", name: "Code With Stein" },
-    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/133ef32931c4ab4a1349729db09297dd0c1927e246712c7406ba1d6760133dd9?apiKey=87da4b67ae5046fdba58e532f6a97e48&", name: "Code With Stein" },
+    { src: img1, name: "Ashok" },
+    { src: img2, name: "Akash" },
+    { src: img3, name: "Ragavi" },
   ];
 
   const trends = [
-    { hashtag: "#Code With Stein", posts: 120 },
-    { hashtag: "#Code With Stein", posts: 120 },
-    { hashtag: "#Code With Stein", posts: 120 },
-    { hashtag: "#Code With Stein", posts: 120 },
+    { hashtag: "#Ashok", posts: 120 },
+    { hashtag: "#Akash", posts: 120 },
+    { hashtag: "#Ragvi", posts: 120 },
+    { hashtag: "#Bala", posts: 120 },
     { hashtag: "#Code With Stein", posts: 120 }
   ];
-
   // Filter data based on search term
   const filteredProfiles = profiles.filter(profile => profile.name.toLowerCase().includes(searchTerm.toLowerCase()));
   const filteredSuggestions = suggestions.filter(suggestion => suggestion.name.toLowerCase().includes(searchTerm.toLowerCase()));
