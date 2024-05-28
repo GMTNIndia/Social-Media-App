@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from django.utils import timezone
 from datetime import timedelta
+from django.contrib.auth import get_user_model
 
 # Create your models here.
 
@@ -34,18 +35,26 @@ class Post(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     
+    
+User = get_user_model()
+
 class Story(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="story_images/", null=True, blank=True)
-    video = models.FileField(upload_to="story_videos/", null=True, blank=True)
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='story_images/', null=True, blank=True)
+    video = models.FileField(upload_to='story_videos/', null=True, blank=True)
     link = models.URLField(null=True, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
-    expires_on = models.DateTimeField()
+    expires_on = models.DateTimeField(editable=False)
 
     def save(self, *args, **kwargs):
-        if not self.expires_on:
-            self.expires_on = self.created_on + timedelta(hours=24)
+        if not self.id:
+            self.created_on = timezone.now()
+        self.expires_on = self.created_on + timedelta(hours=24)
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Story by {self.user.username} created on {self.created_on}"
         
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
