@@ -1,17 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import manish from './manish.jpg';
 import like from '../components/heart.png';
 import comment from '../components/chat-bubble.png';
 
 function MainContent() {
+  const [content, setContent] = useState('');
+  const [image, setImage] = useState(null);
+
+  const handleSubmit = async () => {
+    const accessToken = localStorage.getItem('accessToken');
+
+    try {
+      const formData = new FormData();
+      formData.append('content', content);
+      formData.append('image', image);
+
+      const response = await axios.post(
+        'http://127.0.0.1:8000/api/posts/',
+        formData,
+        {
+          headers: {
+            Authorization:`Bearer ${accessToken}`
+            // 'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      console.log('Post created successfully:', response.data);
+      // Clear the content and image fields after successful post
+      setContent('');
+      setImage(null);
+    } catch (error) {
+      console.error('Error creating post:', error.message);
+      // Handle error
+    }
+  };
+
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
   return (
     <div className="w-full md:w-2/4 p-4 mx-auto">
       <div className="bg-white shadow rounded p-4 mb-4">
-        <textarea className="w-full border rounded p-2" placeholder="What are you thinking about?"></textarea>
-        <button className="bg-gray-600 text-white px-4 py-2 mt-2 rounded">Upload Image</button>
-        <div className="flex justify-end">
-          <button className="bg-purple-600 text-white px-4 py-2 mt-2 rounded">Post</button>
-        </div>
+        <textarea
+          className="w-full border rounded p-2"
+          placeholder="What are you thinking about?"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+        ></textarea>
+        <input type="file" onChange={handleImageChange} />
+        <button className="bg-gray-600 text-white px-4 py-2 mt-2 rounded" onClick={handleSubmit}>
+          Post
+        </button>
       </div>
 
       <div className="bg-white shadow rounded p-4 mb-4">
