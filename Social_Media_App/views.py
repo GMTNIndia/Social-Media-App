@@ -12,8 +12,11 @@ from .serializers import (
     ProfilePhotoUpdateSerializer,
     CustomUserSearchSerializer,
     StorySerializer,
-    CommentSerializer, LikeSerializer, SharedPostSerializer
+    CommentSerializer, 
+    LikeSerializer, 
+    SharedPostSerializer
 )
+from .serializers import *
 from django.utils import timezone
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import ValidationError
@@ -77,7 +80,7 @@ class NewsFeedView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         following_users = user.following.all()
-        queryset = Post.objects.filter(user__in=following_users)
+        queryset = Post.objects.filter(user__in=following_users).order_by('-created_on')
         return queryset
     
 class StoryViewSet(viewsets.ModelViewSet):
@@ -168,3 +171,47 @@ def share_post(request, post_id):
         return Response({"message": f"Post {post_id} shared successfully!"}, status=status.HTTP_200_OK)
     except Post.DoesNotExist:
         return Response({"error": "Post not found."}, status=status.HTTP_404_NOT_FOUND)
+
+class FollowUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, user_id):
+        try:
+            user_to_follow = CustomUser.objects.get(id=user_id)
+            request.user.following.add(user_to_follow)
+            return Response({"detail": "User followed successfully."}, status=status.HTTP_200_OK)
+        except CustomUser.DoesNotExist:
+            return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+class UnfollowUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, user_id):
+        try:
+            user_to_unfollow = CustomUser.objects.get(id=user_id)
+            request.user.following.remove(user_to_unfollow)
+            return Response({"detail": "User unfollowed successfully."}, status=status.HTTP_200_OK)
+        except CustomUser.DoesNotExist:
+            return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+class FollowersListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, user_id):
+        try:
+            user = CustomUser.objects.get(id=user_id)
+            serializer = FollowersSerializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except CustomUser.DoesNotExist:
+            return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+class FollowingListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, user_id):
+        try:
+            user = CustomUser.objects.get(id=user_id)
+            serializer = FollowingSerializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except CustomUser.DoesNotExist:
+            return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)

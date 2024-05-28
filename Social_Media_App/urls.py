@@ -5,6 +5,7 @@ from rest_framework_simplejwt.views import (
 )
 from rest_framework.routers import DefaultRouter
 from .views import NewsFeedView, UserCreateView, UserDetailView,  PostViewSet, ProfilePhotoUpdateView, UserSearchView, StoryViewSet, CommentViewSet, LikeViewSet, SharePostView, share_post
+from .views import *
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -31,8 +32,11 @@ urlpatterns = [
     path('api/posts/<int:pk>/likes/', LikeViewSet.as_view({'get': 'list', 'post': 'create'}), name='like-list'),
     path('api/posts/<int:pk>/comments/', CommentViewSet.as_view({'get': 'list', 'post': 'create'}), name='comment-list'),
     path('api/posts/<int:post_id>/share/', SharePostView.as_view(), name='share-post'),
+    path("api/users/<int:user_id>/follow/", FollowUserView.as_view(), name="follow-user"),
+    path("api/users/<int:user_id>/unfollow/", UnfollowUserView.as_view(), name="unfollow-user"),
+    path("api/users/<int:user_id>/followers/", FollowersListView.as_view(), name="followers-list"),
+    path("api/users/<int:user_id>/following/", FollowingListView.as_view(), name="following-list"),
     path("api/", include(router.urls)),
-
 ]
 
 if settings.DEBUG:

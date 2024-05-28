@@ -89,10 +89,6 @@ class CustomUserSearchSerializer(serializers.ModelSerializer):
             "profile_photo",
         ]
         
-
-
-# serializers.py
-
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
@@ -121,5 +117,29 @@ class SharedPostSerializer(serializers.ModelSerializer):
         model = SharedPost
         fields = ['id', 'original_post', 'shared_by', 'shared_on']
 
+class FollowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'username', 'first_name', 'last_name', 'profile_photo']
 
+class FollowersSerializer(serializers.ModelSerializer):
+    followers = serializers.SerializerMethodField()
 
+    class Meta:
+        model = CustomUser
+        fields = ['followers']
+
+    def get_followers(self, obj):
+        followers = obj.followers.all()
+        return FollowSerializer(followers, many=True).data
+    
+class FollowingSerializer(serializers.ModelSerializer):
+    following = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CustomUser
+        fields = ['following']
+
+    def get_following(self, obj):
+        following = obj.following.all()
+        return FollowSerializer(following, many=True).data
