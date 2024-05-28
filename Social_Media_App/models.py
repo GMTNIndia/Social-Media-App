@@ -46,3 +46,33 @@ class Story(models.Model):
         if not self.expires_on:
             self.expires_on = self.created_on + timedelta(hours=24)
         super().save(*args, **kwargs)
+        
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.content[:30]}"
+
+
+class Like(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('post', 'user')
+
+    def __str__(self):
+        return f"{self.user.username} liked {self.post.id}"
+    
+class SharedPost(models.Model):
+    original_post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='shared_posts')
+    shared_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    shared_on = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"{self.shared_by.username} shared post {self.original_post.id}"

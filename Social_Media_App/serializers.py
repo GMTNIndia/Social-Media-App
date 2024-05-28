@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, Post,Story
+from .models import CustomUser, Post, Story, Comment, Like, SharedPost
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -88,3 +88,38 @@ class CustomUserSearchSerializer(serializers.ModelSerializer):
             "username",
             "profile_photo",
         ]
+        
+
+
+# serializers.py
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['id', 'post', 'user', 'content', 'created_on', 'updated_on']
+        read_only_fields = ['id', 'user', 'created_on', 'updated_on']
+        
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
+
+
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Like
+        fields = ['id', 'post', 'user', 'created_on']
+        read_only_fields = ['id', 'user', 'created_on', 'post']
+
+    def create(self, validated_data):
+        return super().create(validated_data)
+    
+class SharedPostSerializer(serializers.ModelSerializer):
+    original_post = PostSerializer(read_only=True)
+    shared_by = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = SharedPost
+        fields = ['id', 'original_post', 'shared_by', 'shared_on']
+
+
+

@@ -5,15 +5,18 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import CustomUser, Post, Story
+from .models import CustomUser, Post, Story, Comment, Like, SharedPost
 from .serializers import (
     CustomUserSerializer,
     PostSerializer,
     ProfilePhotoUpdateSerializer,
     CustomUserSearchSerializer,
-    StorySerializer
+    StorySerializer,
+    CommentSerializer, LikeSerializer, SharedPostSerializer
 )
 from django.utils import timezone
+from rest_framework.decorators import api_view
+from rest_framework.exceptions import ValidationError
 
 
 class UserCreateView(generics.CreateAPIView):
@@ -91,3 +94,77 @@ class StoryViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+        
+        
+
+class CommentViewSet(viewsets.ModelViewSet):
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        post_id = self.kwargs['pk']
+        return Comment.objects.filter(post_id=post_id)
+
+    def perform_create(self, serializer):
+        post_id = self.kwargs['pk']
+        post = Post.objects.get(id=post_id)
+        serializer.save(user=self.request.user, post=post)
+
+
+class LikeViewSet(viewsets.ModelViewSet):
+    serializer_class = LikeSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        post_id = self.kwargs['pk']
+        return Like.objects.filter(post_id=post_id)
+
+    def perform_create(self, serializer):
+        post_id = self.kwargs['pk']
+        try:
+            post = Post.objects.get(id=post_id)
+            user = self.request.user
+            # Check if the user already liked this post
+            if Like.objects.filter(post=post, user=user).exists():
+                raise ValidationError("You have already liked this post.")
+            serializer.save(user=user, post=post)
+        except Post.DoesNotExist:
+            raise ValidationError("Post not found.")
+    
+    def create(self, request, *args, **kwargs):
+        try:
+            return super().create(request, *args, **kwargs)
+        except ValidationError as e:
+            return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SharePostView(generics.ListCreateAPIView):
+    queryset = SharedPost.objects.all()
+    serializer_class = SharedPostSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        post_id = self.kwargs.get('post_id')
+        return SharedPost.objects.filter(original_post_id=post_id)
+
+    def post(self, request, *args, **kwargs):
+        post_id = self.kwargs.get('post_id')
+        user = request.user
+        try:
+            post = Post.objects.get(id=post_id)
+            shared_post = SharedPost.objects.create(original_post=post, shared_by=user)
+            serializer = self.get_serializer(shared_post)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except Post.DoesNotExist:
+            return Response({"detail": "Post not found."}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST'])
+def share_post(request, post_id):
+    try:
+        post = Post.objects.get(id=post_id)
+        user = request.user
+        SharedPost.objects.create(original_post=post, shared_by=user)
+        return Response({"message": f"Post {post_id} shared successfully!"}, status=status.HTTP_200_OK)
+    except Post.DoesNotExist:
+        return Response({"error": "Post not found."}, status=status.HTTP_404_NOT_FOUND)
