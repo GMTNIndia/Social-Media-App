@@ -1,17 +1,27 @@
 import React, { useState } from "react";
 import MyComponent from "./UserCard"; // Make sure this path is correct
 
-function SearchForm() {
+import axios from 'axios';
+
+function SearchBar() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [error, setError] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
   const handleInputChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // You can handle form submission here if needed
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/api/search/?query=', { searchTerm });
+      setSearchResults(response.data);
+    } catch (err) {
+      setError("An unexpected error occurred. Please try again.");
+    }
   };
+
 
   return (
     <section className="bg-gray-100">
@@ -40,9 +50,10 @@ function SearchForm() {
           </button>
         </section>
       </form>
-      <MyComponent searchTerm={searchTerm} />
+      {error && <p className="text-red-500">{error}</p>}
+      <MyComponent searchResults={searchResults} />
     </section>
   );
 }
 
-export default SearchForm;
+export default SearchBar;

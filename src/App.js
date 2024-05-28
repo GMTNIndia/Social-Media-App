@@ -7,6 +7,7 @@ import Register from './auth/Register';
 import Nopage from './auth/Nopage';
 import Navbar from './Navbar';
 import SearchBar from './components/SearchBar';
+import ChatWindow from './components/ChatWindow';
 function App() {
   return (
    <div>
@@ -18,7 +19,8 @@ function App() {
         <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<Register/>} />
         <Route path="*" element={<Nopage/>} />
-        <Route path="/searchbar" element={<SearchBar/>} />
+        <Route path="/search" element={<SearchBar/>} />
+        <Route path="/chat" element={<ChatWindow/>} />
       
     </Routes>
   </BrowserRouter>
