@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import MyComponent from "./UserCard"; // Make sure this path is correct
+import MyComponent from "./UserCard"; 
 
 import axios from 'axios';
 
