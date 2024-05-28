@@ -210,3 +210,6 @@ function MyComponent({ searchResults }) {
     </div>
   );
 }
+
+
+export default MyComponent;
