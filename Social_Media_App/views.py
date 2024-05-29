@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import CustomUser, Post, Story, Comment, Like, SharedPost
+from .models import CustomUser, Post, Story, Comment, Like, SharedPost, Notification
 from .serializers import (
     CustomUserSerializer,
     PostSerializer,
@@ -14,7 +14,7 @@ from .serializers import (
     StorySerializer,
     CommentSerializer, 
     LikeSerializer, 
-    SharedPostSerializer
+    SharedPostSerializer, NotificationSerializer
 )
 from .serializers import *
 from django.utils import timezone
@@ -22,6 +22,7 @@ from rest_framework.decorators import api_view
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
+from rest_framework.generics import ListAPIView
 
 
 class UserCreateView(generics.CreateAPIView):
@@ -293,3 +294,12 @@ class PostViewSet(viewsets.ViewSet):
             return Response({"detail": "Post not found."}, status=status.HTTP_404_NOT_FOUND)
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    
+class NotificationListView(generics.ListAPIView):
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Notification.objects.filter(user=user)

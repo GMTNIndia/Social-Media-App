@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from rest_framework.routers import DefaultRouter
-from .views import NewsFeedView, UserCreateView, UserDetailView,  PostViewSet, ProfilePhotoUpdateView, UserSearchView, StoryViewSet, CommentViewSet, LikeViewSet, SharePostView, share_post
+from .views import NewsFeedView, UserCreateView, UserDetailView,  PostViewSet, ProfilePhotoUpdateView, UserSearchView, StoryViewSet, CommentViewSet, LikeViewSet, SharePostView, NotificationListView, share_post
 from .views import *
 from django.conf import settings
 from django.conf.urls.static import static
@@ -46,7 +46,7 @@ urlpatterns = [
     ),
     path('posts/', PostViewSet.as_view({'get': 'list', 'post': 'create'}), name='post-list'),
     path('posts/<int:pk>/', PostViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'delete'}), name='post-detail'),
-
+    path('api/notifications/', NotificationListView.as_view(), name='notifications'),
     path("api/", include(router.urls)),
 ]
 

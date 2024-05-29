@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import CustomUser, Post, Story, Comment, Like, SharedPost ,Message ,Chat
+from .models import CustomUser, Post, Story, Comment, Like, SharedPost ,Message ,Chat, Notification
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -187,3 +187,8 @@ class ProfilePhotoUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ["profile_photo"]
+        
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ['id', 'user', 'notification_type', 'content', 'read', 'created_on']
