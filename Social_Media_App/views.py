@@ -241,3 +241,11 @@ class MessageCreateView(generics.CreateAPIView):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+    
+class ProfilePhotoRetrieveView(generics.RetrieveAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = ProfilePhotoUpdateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user

@@ -39,6 +39,11 @@ urlpatterns = [
     path("api/chats/", ChatListView.as_view(), name="chat-list"),
     path("api/chats/<int:pk>/", ChatDetailView.as_view(), name="chat-detail"),
     path("api/chats/<int:chat_id>/messages/", MessageCreateView.as_view(), name="message-create"),
+    path(
+        "api/profile/photo/retrieve/",
+        ProfilePhotoRetrieveView.as_view(),
+        name="profile_photo_retrieve",
+    ),
     path("api/", include(router.urls)),
 ]
 
