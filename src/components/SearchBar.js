@@ -1,31 +1,54 @@
 import React, { useState } from "react";
-import MyComponent from "./UserCard"; 
-
+import MyComponent from "./UserCard";
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
 
 function SearchBar() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [error, setError] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(""); // State for the search term
+  const [searchResults, setSearchResults] = useState([]); // State for the search results
+  const [error, setError] = useState(""); // State for handling errors
+  const navigate = useNavigate(); // useNavigate hook for navigation
 
   const handleInputChange = (e) => {
-    setSearchTerm(e.target.value);
+    setSearchTerm(e.target.value); // Update the search term state
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setError(''); // Clear any previous errors
+
+    const accessToken = localStorage.getItem('accessToken'); // Retrieve the token from local storage
+
+    if (!accessToken) {
+      setError('User is not logged in'); // Check if the user is logged in
+      return;
+    }
+
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/search/?query=', { searchTerm });
-      setSearchResults(response.data);
+      const response = await axios.get('http://127.0.0.1:8000/api/search/', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        params: {
+          query: searchTerm,
+        },
+      });
+
+      setSearchResults(response.data); // Update search results state with the response data
     } catch (err) {
-      setError("An unexpected error occurred. Please try again.");
+      if (err.response && err.response.data && err.response.data.detail) {
+        setError(err.response.data.detail); // Set error from response
+      } else {
+        setError('An unexpected error occurred'); // Handle unexpected errors
+      }
+      console.error('Error:', err);
     }
   };
 
-
   return (
     <section className="bg-gray-100">
-      <form 
+      <form
         className="flex flex-col justify-center px-4 py-5 bg-white rounded-lg border border-solid shadow-sm border-zinc-200 max-w-[754px]"
         onSubmit={handleSubmit}
       >
@@ -57,3 +80,4 @@ function SearchBar() {
 }
 
 export default SearchBar;
+
