@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import CustomUser, Post, Story, Comment, Like, SharedPost ,Message ,Chat
 
 
@@ -154,3 +155,30 @@ class ChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chat
         fields = ['id', 'participants', 'messages']
+        
+               
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Add custom claims
+        token['id'] = user.id
+        token['first_name'] = user.first_name
+        token['last_name'] = user.last_name
+        token['username'] = user.username
+
+        return token
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        # Add custom user data to the response
+        data.update({
+            'id': self.user.id,
+            'first_name': self.user.first_name,
+            'last_name': self.user.last_name,
+            'username': self.user.username,
+        })
+
+        return data

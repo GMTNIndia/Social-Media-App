@@ -20,6 +20,8 @@ from .serializers import *
 from django.utils import timezone
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import ValidationError
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import CustomTokenObtainPairSerializer
 
 
 class UserCreateView(generics.CreateAPIView):
@@ -236,3 +238,6 @@ class MessageCreateView(generics.CreateAPIView):
         chat_id = self.kwargs['chat_id']
         chat = Chat.objects.get(pk=chat_id)
         serializer.save(sender=self.request.user, chat=chat)
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
