@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -25,9 +26,10 @@ function Login() {
 
       if (response.status === 200) {
         const data = response.data;
-        // localStorage.setItem('accessToken', data.access);
-        localStorage.setItem('accessToken', 'Bearer ' + data.access);
+        // Assuming the response includes user_id along with access and refresh tokens
+        localStorage.setItem('accessToken', data.access);
         localStorage.setItem('refreshToken', data.refresh);
+        localStorage.setItem('userId', data.user.userId); // Store user ID in localStorage
         navigate('/');
       } else {
         setError(response.data.detail || 'Login failed');
