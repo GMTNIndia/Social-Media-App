@@ -157,30 +157,47 @@ class ChatSerializer(serializers.ModelSerializer):
         fields = ['id', 'participants', 'messages']
         
                
+# class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+#     @classmethod
+#     def get_token(cls, user):
+#         token = super().get_token(user)
+
+#         # Add custom claims
+#         token['id'] = user.id
+#         token['first_name'] = user.first_name
+#         token['last_name'] = user.last_name
+#         token['username'] = user.username
+
+#         return token
+
+#     def validate(self, attrs):
+#         data = super().validate(attrs)
+
+#         # Add custom user data to the response
+#         data.update({
+#             'id': self.user.id,
+#             'first_name': self.user.first_name,
+#             'last_name': self.user.last_name,
+#             'username': self.user.username,
+#         })
+
+#         return data
+
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-
-        # Add custom claims
-        token['id'] = user.id
-        token['first_name'] = user.first_name
-        token['last_name'] = user.last_name
-        token['username'] = user.username
-
-        return token
 
     def validate(self, attrs):
         data = super().validate(attrs)
 
-        # Add custom user data to the response
-        data.update({
-            'id': self.user.id,
-            'first_name': self.user.first_name,
-            'last_name': self.user.last_name,
-            'username': self.user.username,
-        })
+        user = self.user
+        user_data = {
+            'userId':user.id,
+            'username':user.username,
+            'email': user.email,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+        }
 
+        data.update({'user': user_data})
         return data
     
 class ProfilePhotoUpdateSerializer(serializers.ModelSerializer):
