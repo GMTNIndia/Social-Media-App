@@ -215,3 +215,24 @@ class FollowingListView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except CustomUser.DoesNotExist:
             return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+class ChatListView(generics.ListAPIView):
+    serializer_class = ChatSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return self.request.user.chats.all()
+
+class ChatDetailView(generics.RetrieveAPIView):
+    serializer_class = ChatSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = Chat.objects.all()
+
+class MessageCreateView(generics.CreateAPIView):
+    serializer_class = MessageSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        chat_id = self.kwargs['chat_id']
+        chat = Chat.objects.get(pk=chat_id)
+        serializer.save(sender=self.request.user, chat=chat)

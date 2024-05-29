@@ -36,6 +36,9 @@ urlpatterns = [
     path("api/users/<int:user_id>/unfollow/", UnfollowUserView.as_view(), name="unfollow-user"),
     path("api/users/<int:user_id>/followers/", FollowersListView.as_view(), name="followers-list"),
     path("api/users/<int:user_id>/following/", FollowingListView.as_view(), name="following-list"),
+    path("api/chats/", ChatListView.as_view(), name="chat-list"),
+    path("api/chats/<int:pk>/", ChatDetailView.as_view(), name="chat-detail"),
+    path("api/chats/<int:chat_id>/messages/", MessageCreateView.as_view(), name="message-create"),
     path("api/", include(router.urls)),
 ]
 

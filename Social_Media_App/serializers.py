@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, Post, Story, Comment, Like, SharedPost
+from .models import CustomUser, Post, Story, Comment, Like, SharedPost ,Message ,Chat
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -143,3 +143,14 @@ class FollowingSerializer(serializers.ModelSerializer):
     def get_following(self, obj):
         following = obj.following.all()
         return FollowSerializer(following, many=True).data
+    
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ['id', 'sender', 'content', 'timestamp']
+
+class ChatSerializer(serializers.ModelSerializer):
+    messages = MessageSerializer(many=True, read_only=True)
+    class Meta:
+        model = Chat
+        fields = ['id', 'participants', 'messages']
