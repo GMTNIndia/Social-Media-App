@@ -44,6 +44,9 @@ urlpatterns = [
         ProfilePhotoRetrieveView.as_view(),
         name="profile_photo_retrieve",
     ),
+    path('posts/', PostViewSet.as_view({'get': 'list', 'post': 'create'}), name='post-list'),
+    path('posts/<int:pk>/', PostViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'delete'}), name='post-detail'),
+
     path("api/", include(router.urls)),
 ]
 
