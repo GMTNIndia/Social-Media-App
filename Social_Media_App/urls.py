@@ -36,9 +36,9 @@ urlpatterns = [
     path("api/users/<int:user_id>/unfollow/", UnfollowUserView.as_view(), name="unfollow-user"),
     path("api/users/<int:user_id>/followers/", FollowersListView.as_view(), name="followers-list"),
     path("api/users/<int:user_id>/following/", FollowingListView.as_view(), name="following-list"),
-    path("api/chats/", ChatListView.as_view(), name="chat-list"),
-    path("api/chats/<int:pk>/", ChatDetailView.as_view(), name="chat-detail"),
-    path("api/chats/<int:chat_id>/messages/", MessageCreateView.as_view(), name="message-create"),
+    # path("api/chats/", ChatListView.as_view(), name="chat-list"),
+    # path("api/chats/<int:pk>/", ChatDetailView.as_view(), name="chat-detail"),
+    # path("api/chats/<int:chat_id>/messages/", MessageCreateView.as_view(), name="message-create"),
     path(
         "api/profile/photo/retrieve/",
         ProfilePhotoRetrieveView.as_view(),
@@ -47,6 +47,10 @@ urlpatterns = [
     path('posts/', PostViewSet.as_view({'get': 'list', 'post': 'create'}), name='post-list'),
     path('posts/<int:pk>/', PostViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'delete'}), name='post-detail'),
     path('api/notifications/', NotificationListView.as_view(), name='notifications'),
+    path('api/notifications/<int:notification_id>/read/', notification_detail, name='notification_detail'),
+    path('all-users/', AllUsersAPIView.as_view(), name='all-users'),
+    path('chat/<int:user_id>/<int:partner_id>/', ChatHistoryAPIView.as_view(), name='chat-history'),
+    path('send-message/', SendMessageAPIView.as_view(), name='send-message'),
     path("api/", include(router.urls)),
 ]
 

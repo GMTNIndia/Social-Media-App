@@ -34,9 +34,10 @@ class Post(models.Model):
     image = models.ImageField(upload_to="post_images/", null=True, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
-    
-    
+
+
 User = get_user_model()
+
 
 class Story(models.Model):
     id = models.AutoField(primary_key=True)
@@ -55,9 +56,11 @@ class Story(models.Model):
 
     def __str__(self):
         return f"Story by {self.user.username} created on {self.created_on}"
-        
+
+
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    post = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     content = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
@@ -68,7 +71,8 @@ class Comment(models.Model):
 
 
 class Like(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
+    post = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name='likes')
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
 
@@ -77,25 +81,28 @@ class Like(models.Model):
 
     def __str__(self):
         return f"{self.user.username} liked {self.post.id}"
-    
+
+
 class SharedPost(models.Model):
-    original_post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='shared_posts')
+    original_post = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name='shared_posts')
     shared_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     shared_on = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.shared_by.username} shared post {self.original_post.id}"
-    
-class Chat(models.Model):
-    participants = models.ManyToManyField(CustomUser, related_name='chats')
-    created_at = models.DateTimeField(auto_now_add=True)
 
-class Message(models.Model):
-    chat = models.ForeignKey(Chat, related_name='messages', on_delete=models.CASCADE)
-    sender = models.ForeignKey(CustomUser, related_name='messages', on_delete=models.CASCADE)
-    text = models.TextField()
-    timestamp = models.DateTimeField(auto_now_add=True)
-    
+# class Chat(models.Model):
+#     participants = models.ManyToManyField(CustomUser, related_name='chats')
+#     created_at = models.DateTimeField(auto_now_add=True)
+
+# class Message(models.Model):
+#     chat = models.ForeignKey(Chat, related_name='messages', on_delete=models.CASCADE)
+#     sender = models.ForeignKey(CustomUser, related_name='messages', on_delete=models.CASCADE)
+#     text = models.TextField()
+#     timestamp = models.DateTimeField(auto_now_add=True)
+
+
 class Notification(models.Model):
     NOTIFICATION_TYPES = (
         ('FR', 'Friend Request'),
@@ -104,11 +111,22 @@ class Notification(models.Model):
         ('COMMENT', 'Comment'),
         ('LIKE', 'Like'),
     )
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='notifications')
-    notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
+    user = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, related_name='notifications')
+    notification_type = models.CharField(
+        max_length=20, choices=NOTIFICATION_TYPES)
     content = models.TextField()
     read = models.BooleanField(default=False)
     created_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Notification for {self.user.username} - {self.notification_type}"
+
+
+class Message(models.Model):
+    sender = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='sent_messages')
+    receiver = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='received_messages', default=None)
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
