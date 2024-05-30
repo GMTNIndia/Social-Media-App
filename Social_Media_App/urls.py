@@ -47,7 +47,7 @@ urlpatterns = [
     path('posts/', PostViewSet.as_view({'get': 'list', 'post': 'create'}), name='post-list'),
     path('posts/<int:pk>/', PostViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'delete'}), name='post-detail'),
     path('api/notifications/', NotificationListView.as_view(), name='notifications'),
-    path('notifications/<int:notification_id>/read/', mark_notification_as_read, name='mark_notification_as_read'),
+    path('api/notifications/<int:notification_id>/read/', mark_notification_as_read, name='mark_notification_as_read'),
     path("api/", include(router.urls)),
 ]
 
