@@ -18,7 +18,7 @@ from .serializers import (
 )
 from .serializers import *
 from django.utils import timezone
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
@@ -304,15 +304,22 @@ class NotificationListView(generics.ListAPIView):
         user = self.request.user
         return Notification.objects.filter(user=user)
     
-@api_view(['POST'])
-def mark_notification_as_read(request, notification_id):
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def notification_detail(request, notification_id):
     try:
         notification = Notification.objects.get(id=notification_id, user=request.user)
+    except Notification.DoesNotExist:
+        return Response({"detail": "Notification not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = NotificationSerializer(notification)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST':
         notification.read = True
         notification.save()
         return Response({"detail": "Notification marked as read."}, status=status.HTTP_200_OK)
-    except Notification.DoesNotExist:
-        return Response({"detail": "Notification not found."}, status=status.HTTP_404_NOT_FOUND)
     
 class AllUsersAPIView(generics.ListAPIView):
     serializer_class = CustomUserSerializer
