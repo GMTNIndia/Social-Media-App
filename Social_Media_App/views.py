@@ -313,3 +313,16 @@ def mark_notification_as_read(request, notification_id):
         return Response({"detail": "Notification marked as read."}, status=status.HTTP_200_OK)
     except Notification.DoesNotExist:
         return Response({"detail": "Notification not found."}, status=status.HTTP_404_NOT_FOUND)
+    
+class AllUsersAPIView(generics.ListAPIView):
+    serializer_class = CustomUserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return CustomUser.objects.exclude(id=user.id)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
