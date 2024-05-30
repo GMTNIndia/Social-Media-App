@@ -5,15 +5,15 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import CustomUser, Post, Story, Comment, Like, SharedPost, Notification
+from .models import CustomUser, Post, Story, Comment, Like, SharedPost, Notification, Message
 from .serializers import (
     CustomUserSerializer,
     PostSerializer,
     ProfilePhotoUpdateSerializer,
     CustomUserSearchSerializer,
     StorySerializer,
-    CommentSerializer, 
-    LikeSerializer, 
+    CommentSerializer,
+    LikeSerializer,
     SharedPostSerializer, NotificationSerializer
 )
 from .serializers import *
@@ -83,9 +83,11 @@ class NewsFeedView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         following_users = user.following.all()
-        queryset = Post.objects.filter(user__in=following_users).order_by('-created_on')
+        queryset = Post.objects.filter(
+            user__in=following_users).order_by('-created_on')
         return queryset
-    
+
+
 class StoryViewSet(viewsets.ModelViewSet):
     queryset = Story.objects.all()
     serializer_class = StorySerializer
@@ -100,8 +102,7 @@ class StoryViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-        
-        
+
 
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
@@ -136,7 +137,7 @@ class LikeViewSet(viewsets.ModelViewSet):
             serializer.save(user=user, post=post)
         except Post.DoesNotExist:
             raise ValidationError("Post not found.")
-    
+
     def create(self, request, *args, **kwargs):
         try:
             return super().create(request, *args, **kwargs)
@@ -158,7 +159,8 @@ class SharePostView(generics.ListCreateAPIView):
         user = request.user
         try:
             post = Post.objects.get(id=post_id)
-            shared_post = SharedPost.objects.create(original_post=post, shared_by=user)
+            shared_post = SharedPost.objects.create(
+                original_post=post, shared_by=user)
             serializer = self.get_serializer(shared_post)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except Post.DoesNotExist:
@@ -175,6 +177,7 @@ def share_post(request, post_id):
     except Post.DoesNotExist:
         return Response({"error": "Post not found."}, status=status.HTTP_404_NOT_FOUND)
 
+
 class FollowUserView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -185,6 +188,7 @@ class FollowUserView(APIView):
             return Response({"detail": "User followed successfully."}, status=status.HTTP_200_OK)
         except CustomUser.DoesNotExist:
             return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
 
 class UnfollowUserView(APIView):
     permission_classes = [IsAuthenticated]
@@ -197,6 +201,7 @@ class UnfollowUserView(APIView):
         except CustomUser.DoesNotExist:
             return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
+
 class FollowersListView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -208,6 +213,7 @@ class FollowersListView(APIView):
         except CustomUser.DoesNotExist:
             return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
+
 class FollowingListView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -218,31 +224,34 @@ class FollowingListView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except CustomUser.DoesNotExist:
             return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
-        
-class ChatListView(generics.ListAPIView):
-    serializer_class = ChatSerializer
-    permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        return self.request.user.chats.all()
+# class ChatListView(generics.ListAPIView):
+#     serializer_class = ChatSerializer
+#     permission_classes = [IsAuthenticated]
 
-class ChatDetailView(generics.RetrieveAPIView):
-    serializer_class = ChatSerializer
-    permission_classes = [IsAuthenticated]
-    queryset = Chat.objects.all()
+#     def get_queryset(self):
+#         return self.request.user.chats.all()
 
-class MessageCreateView(generics.CreateAPIView):
-    serializer_class = MessageSerializer
-    permission_classes = [IsAuthenticated]
+# class ChatDetailView(generics.RetrieveAPIView):
+#     serializer_class = ChatSerializer
+#     permission_classes = [IsAuthenticated]
+#     queryset = Chat.objects.all()
 
-    def perform_create(self, serializer):
-        chat_id = self.kwargs['chat_id']
-        chat = Chat.objects.get(pk=chat_id)
-        serializer.save(sender=self.request.user, chat=chat)
+
+# class MessageCreateView(generics.CreateAPIView):
+#     serializer_class = MessageSerializer
+#     permission_classes = [IsAuthenticated]
+
+#     def perform_create(self, serializer):
+#         chat_id = self.kwargs['chat_id']
+#         chat = Chat.objects.get(pk=chat_id)
+#         serializer.save(sender=self.request.user, chat=chat)
+
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
-    
+
+
 class ProfilePhotoRetrieveView(generics.RetrieveAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = ProfilePhotoUpdateSerializer
@@ -251,11 +260,13 @@ class ProfilePhotoRetrieveView(generics.RetrieveAPIView):
     def get_object(self):
         return self.request.user
 
+
 class PostViewSet(viewsets.ViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
     basename = 'post'
+
     def list(self, request):
         queryset = Post.objects.all()
         serializer = PostSerializer(queryset, many=True)
@@ -295,7 +306,7 @@ class PostViewSet(viewsets.ViewSet):
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    
+
 class NotificationListView(generics.ListAPIView):
     serializer_class = NotificationSerializer
     permission_classes = [IsAuthenticated]
@@ -303,24 +314,27 @@ class NotificationListView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         return Notification.objects.filter(user=user)
-    
+
+
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def notification_detail(request, notification_id):
     try:
-        notification = Notification.objects.get(id=notification_id, user=request.user)
+        notification = Notification.objects.get(
+            id=notification_id, user=request.user)
     except Notification.DoesNotExist:
         return Response({"detail": "Notification not found."}, status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
         serializer = NotificationSerializer(notification)
         return Response(serializer.data)
-    
+
     elif request.method == 'POST':
         notification.read = True
         notification.save()
         return Response({"detail": "Notification marked as read."}, status=status.HTTP_200_OK)
-    
+
+
 class AllUsersAPIView(generics.ListAPIView):
     serializer_class = CustomUserSerializer
     permission_classes = [IsAuthenticated]
@@ -333,3 +347,20 @@ class AllUsersAPIView(generics.ListAPIView):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+class ChatHistoryAPIView(generics.ListAPIView):
+    serializer_class = MessageSerializer
+
+    def get_queryset(self):
+        user_id = self.kwargs['user_id']
+        partner_id = self.kwargs['partner_id']
+        return Message.objects.filter(sender_id=user_id, receiver_id=partner_id) | Message.objects.filter(sender_id=partner_id, receiver_id=user_id)
+
+class SendMessageAPIView(generics.CreateAPIView):
+    serializer_class = MessageSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

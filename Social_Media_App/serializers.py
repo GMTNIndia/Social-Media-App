@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import CustomUser, Post, Story, Comment, Like, SharedPost ,Message ,Chat, Notification
+from .models import CustomUser, Post, Story, Comment, Like, SharedPost, Notification, Message
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -63,7 +63,8 @@ class PostSerializer(serializers.ModelSerializer):
             "created_on",
             "updated_on",
         ]
-        
+
+
 class StorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Story
@@ -89,14 +90,17 @@ class CustomUserSearchSerializer(serializers.ModelSerializer):
             "username",
             "profile_photo",
         ]
-        
+
+
 class CommentSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
+
     class Meta:
         model = Comment
-        fields = ['id', 'post', 'user', 'username', 'content', 'created_on', 'updated_on']
+        fields = ['id', 'post', 'user', 'username',
+                  'content', 'created_on', 'updated_on']
         read_only_fields = ['id', 'user', 'created_on', 'updated_on']
-        
+
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user
         return super().create(validated_data)
@@ -110,7 +114,8 @@ class LikeSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return super().create(validated_data)
-    
+
+
 class SharedPostSerializer(serializers.ModelSerializer):
     original_post = PostSerializer(read_only=True)
     shared_by = serializers.StringRelatedField(read_only=True)
@@ -119,10 +124,12 @@ class SharedPostSerializer(serializers.ModelSerializer):
         model = SharedPost
         fields = ['id', 'original_post', 'shared_by', 'shared_on']
 
+
 class FollowSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'username', 'first_name', 'last_name', 'profile_photo']
+
 
 class FollowersSerializer(serializers.ModelSerializer):
     followers = serializers.SerializerMethodField()
@@ -134,7 +141,8 @@ class FollowersSerializer(serializers.ModelSerializer):
     def get_followers(self, obj):
         followers = obj.followers.all()
         return FollowSerializer(followers, many=True).data
-    
+
+
 class FollowingSerializer(serializers.ModelSerializer):
     following = serializers.SerializerMethodField()
 
@@ -145,19 +153,20 @@ class FollowingSerializer(serializers.ModelSerializer):
     def get_following(self, obj):
         following = obj.following.all()
         return FollowSerializer(following, many=True).data
-    
-class MessageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Message
-        fields = ['id', 'sender', 'content', 'timestamp']
 
-class ChatSerializer(serializers.ModelSerializer):
-    messages = MessageSerializer(many=True, read_only=True)
-    class Meta:
-        model = Chat
-        fields = ['id', 'participants', 'messages']
-        
-               
+
+# class MessageSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Message
+#         fields = ['id', 'sender', 'content', 'timestamp']
+
+# class ChatSerializer(serializers.ModelSerializer):
+#     messages = MessageSerializer(many=True, read_only=True)
+#     class Meta:
+#         model = Chat
+#         fields = ['id', 'participants', 'messages']
+
+
 # class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 #     @classmethod
 #     def get_token(cls, user):
@@ -191,8 +200,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         user = self.user
         user_data = {
-            'userId':user.id,
-            'username':user.username,
+            'userId': user.id,
+            'username': user.username,
             'email': user.email,
             'first_name': user.first_name,
             'last_name': user.last_name,
@@ -200,15 +209,24 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         data.update({'user': user_data})
         return data
-    
+
+
 class ProfilePhotoUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ["profile_photo"]
-        
+
+
 class NotificationSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
 
     class Meta:
         model = Notification
-        fields = ['id', 'user', 'username', 'notification_type', 'content', 'read', 'created_on']
+        fields = ['id', 'user', 'username', 'notification_type',
+                  'content', 'read', 'created_on']
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = '__all__'

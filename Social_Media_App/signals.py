@@ -24,16 +24,16 @@ def create_like_notification(sender, instance, created, **kwargs):
 #             content=f"User {instance.user.username} commented on your post.",
 #         )
 
-@receiver(post_save, sender=Message)
-def create_message_notification(sender, instance, created, **kwargs):
-    if created:
-        for participant in instance.chat.participants.all():
-            if participant != instance.sender:
-                Notification.objects.create(
-                    user=participant,
-                    notification_type='MSG',
-                    content=f"User {instance.sender.username} sent you a message.",
-                )
+# @receiver(post_save, sender=Message)
+# def create_message_notification(sender, instance, created, **kwargs):
+#     if created:
+#         for participant in instance.chat.participants.all():
+#             if participant != instance.sender:
+#                 Notification.objects.create(
+#                     user=participant,
+#                     notification_type='MSG',
+#                     content=f"User {instance.sender.username} sent you a message.",
+#                 )
 
 @receiver(m2m_changed, sender=CustomUser.following.through)
 def create_friend_request_notification(sender, instance, action, reverse, pk_set, **kwargs):
