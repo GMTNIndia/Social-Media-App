@@ -91,9 +91,10 @@ class CustomUserSearchSerializer(serializers.ModelSerializer):
         ]
         
 class CommentSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
     class Meta:
         model = Comment
-        fields = ['id', 'post', 'user', 'content', 'created_on', 'updated_on']
+        fields = ['id', 'post', 'user', 'username', 'content', 'created_on', 'updated_on']
         read_only_fields = ['id', 'user', 'created_on', 'updated_on']
         
     def create(self, validated_data):
