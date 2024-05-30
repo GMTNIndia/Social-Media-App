@@ -68,3 +68,13 @@ def create_comment_and_mention_notification(sender, instance, created, **kwargs)
                 )
             except User.DoesNotExist:
                 continue
+            
+@receiver(post_save, sender=Message)
+def create_message_notification(sender, instance, created, **kwargs):
+    if created:
+        # Create a notification for the receiver
+        Notification.objects.create(
+            user=instance.receiver,
+            notification_type='MSG',
+            content=f"User {instance.sender.username} sent you a message.",
+        )
