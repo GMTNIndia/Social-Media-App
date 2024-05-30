@@ -118,12 +118,19 @@
 
 
 
-import React from "react";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 
 function CardProfile({ src, name, friends, posts }) {
   return (
     <section className="flex flex-col grow justify-center items-center px-2 py-4 mx-auto w-full text-xs rounded-lg border border-solid bg-zinc-200 border-zinc-200 max-md:mt-5">
-      <img loading="lazy" src={src} alt={`Profile of ${name}`} className="rounded-full aspect-square w-[98px]" />
+      <img 
+        loading="lazy" 
+        src={ `http://127.0.0.1:8000/api/profile/photo/retrieve/${image}` } 
+        alt={`Profile of ${name}`} 
+        className="rounded-full aspect-square w-[98px]" 
+      />
       <h2 className="mt-2 font-semibold text-neutral-900">{name}</h2>
       <div className="flex gap-5 justify-between self-stretch mt-6 font-medium text-zinc-600">
         <span>{friends} Friends</span>
@@ -137,7 +144,12 @@ function FriendSuggestion({ src, name }) {
   return (
     <div className="flex gap-5 justify-between mt-3.5 w-full">
       <div className="flex gap-2.5 font-medium text-neutral-900">
-        <img loading="lazy" src={src} alt={`Profile of ${name}`} className="shrink-0 w-8 rounded-full aspect-square" />
+        <img 
+          loading="lazy" 
+          src={`http://127.0.0.1:8000/api/profile/photo/retrieve/${src}` } 
+          alt={`Profile of ${name}`} 
+          className="shrink-0 w-8 rounded-full aspect-square" 
+        />
         <span className="my-auto">{name}</span>
       </div>
       <button className="justify-center self-start p-3 font-semibold text-gray-100 whitespace-nowrap bg-purple-700 rounded-md">Show</button>
@@ -157,7 +169,61 @@ function Trend({ hashtag, posts }) {
   );
 }
 
+
+
 function MyComponent({ searchResults }) {
+
+  
+    const [profileImage, setProfileImage] = useState(null);
+    const [image, setImage] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+  
+    useEffect(() => {
+      const fetchProfileImage = async () => {
+        try {
+          const response = await axios.get('http://127.0.0.1:8000/api/profile/photo/retrieve/', {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            },
+          });
+          if (response.data.profile_photo) {
+            setProfileImage(response.data.profile_photo);
+          }
+        } catch (error) {
+          console.error('Error fetching profile image:', error.message);
+        }
+      };
+  
+      fetchProfileImage();
+    }, []);
+  
+    const handleImageChange = (e) => {
+      setImage(e.target.files[0]);
+    };
+  
+    const handleSubmit = async () => {
+      try {
+        const formData = new FormData();
+        formData.append('photo', image);
+  
+        const response = await axios.put(
+          'http://127.0.0.1:8000/api/profile/photo/',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            },
+          }
+        );
+  
+        console.log('Profile picture updated successfully:', response.data);
+        setProfileImage(response.data.photo); 
+        setShowModal(false);
+      } catch (error) {
+        console.error('Error updating profile picture:', error.message);
+      }
+    };
   return (
     <div className="flex flex-col pb-20 bg-gray-100">
       <main className="self-center mt-9 w-full max-w-[1043px] max-md:max-w-full">
@@ -170,7 +236,7 @@ function MyComponent({ searchResults }) {
                     {searchResults.map((result, index) => (
                       <CardProfile
                         key={index}
-                        src={result.src || "default-image-url"} // Assuming src is part of the result, use a default image if not present
+                        src={result.src || "default-image-url"}
                         name={result.name}
                         friends={result.friends}
                         posts={result.posts}
@@ -188,7 +254,7 @@ function MyComponent({ searchResults }) {
                 {searchResults.slice(0, 3).map((result, index) => (
                   <FriendSuggestion
                     key={index}
-                    src={result.src || "default-image-url"} // Assuming src is part of the result, use a default image if not present
+                    src={result.src || "default-image-url"}
                     name={result.name}
                   />
                 ))}
@@ -210,6 +276,5 @@ function MyComponent({ searchResults }) {
     </div>
   );
 }
-
 
 export default MyComponent;

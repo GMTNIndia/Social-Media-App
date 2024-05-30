@@ -1,13 +1,33 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import manish from '../components/manish.jpg';
 import Edit from '../components/Edit.png';
-import FileUploader from "./Drag";
+import FileUploader from './Drag';
 
 function Sidebar() {
   const [showModal, setShowModal] = useState(false);
   const [image, setImage] = useState(null);
+  const [profileImage, setProfileImage] = useState(manish); // Default image
+
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/profile/photo/retrieve/', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          },
+        });
+        if (response.data.profile_photo) {
+          setProfileImage(response.data.profile_photo);
+        }
+      } catch (error) {
+        console.error('Error fetching profile image:', error.message);
+      }
+    };
+
+    fetchProfileImage();
+  }, []);
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
@@ -18,24 +38,22 @@ function Sidebar() {
       const formData = new FormData();
       formData.append('photo', image);
 
-      // Make an API request to update the profile picture
       const response = await axios.put(
         'http://127.0.0.1:8000/api/profile/photo/',
         formData,
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`, // Assuming you have a token stored in localStorage for authentication
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           },
         }
       );
 
       console.log('Profile picture updated successfully:', response.data);
-     
+      setProfileImage(response.data.photo); 
+      setShowModal(false);
     } catch (error) {
-    
       console.error('Error updating profile picture:', error.message);
-         
     }
   };
 
@@ -45,7 +63,7 @@ function Sidebar() {
         <div className="flex justify-center">
           <div className="relative">
             <img
-              src={manish}
+              src={profileImage}
               alt="Profile"
               className="rounded-full h-40 w-40 overflow-hidden"
               onClick={() => setShowModal(true)}
@@ -62,7 +80,7 @@ function Sidebar() {
             </div>
           </div>
         </div>
-        
+
         {/* Modal */}
         {showModal && (
           <>
@@ -82,8 +100,8 @@ function Sidebar() {
                   </div>
                   <div className="relative p-6 flex flex-row items-center">
                     <img
-                      src={manish}
-                      alt="Your Image Alt Text"
+                      src={profileImage}
+                      alt="Current Profile"
                       className="mr-4 max-w-[40%] max-h-[200px]"
                     />
                     <div className="text-blueGray-500 text-lg leading-relaxed">
@@ -126,14 +144,6 @@ function Sidebar() {
 }
 
 export default Sidebar;
-
-
-
-
-
-
-
-
 
 
 
