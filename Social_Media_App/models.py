@@ -95,3 +95,20 @@ class Message(models.Model):
     sender = models.ForeignKey(CustomUser, related_name='messages', on_delete=models.CASCADE)
     text = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+    
+class Notification(models.Model):
+    NOTIFICATION_TYPES = (
+        ('FR', 'Friend Request'),
+        ('MSG', 'Message'),
+        ('MENTION', 'Mention'),
+        ('COMMENT', 'Comment'),
+        ('LIKE', 'Like'),
+    )
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='notifications')
+    notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
+    content = models.TextField()
+    read = models.BooleanField(default=False)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Notification for {self.user.username} - {self.notification_type}"
