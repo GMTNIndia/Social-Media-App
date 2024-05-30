@@ -303,3 +303,13 @@ class NotificationListView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         return Notification.objects.filter(user=user)
+    
+@api_view(['POST'])
+def mark_notification_as_read(request, notification_id):
+    try:
+        notification = Notification.objects.get(id=notification_id, user=request.user)
+        notification.read = True
+        notification.save()
+        return Response({"detail": "Notification marked as read."}, status=status.HTTP_200_OK)
+    except Notification.DoesNotExist:
+        return Response({"detail": "Notification not found."}, status=status.HTTP_404_NOT_FOUND)
