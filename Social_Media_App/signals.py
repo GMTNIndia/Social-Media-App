@@ -2,6 +2,7 @@ from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from .models import Like, Comment, Notification, CustomUser, Message
 from django.contrib.auth import get_user_model
+import re
 
 User = get_user_model()
 
@@ -14,14 +15,14 @@ def create_like_notification(sender, instance, created, **kwargs):
             content=f"User {instance.user.username} liked your post.",
         )
 
-@receiver(post_save, sender=Comment)
-def create_comment_notification(sender, instance, created, **kwargs):
-    if created:
-        Notification.objects.create(
-            user=instance.post.user,
-            notification_type='COMMENT',
-            content=f"User {instance.user.username} commented on your post.",
-        )
+# @receiver(post_save, sender=Comment)
+# def create_comment_notification(sender, instance, created, **kwargs):
+#     if created:
+#         Notification.objects.create(
+#             user=instance.post.user,
+#             notification_type='COMMENT',
+#             content=f"User {instance.user.username} commented on your post.",
+#         )
 
 @receiver(post_save, sender=Message)
 def create_message_notification(sender, instance, created, **kwargs):
@@ -45,11 +46,25 @@ def create_friend_request_notification(sender, instance, action, reverse, pk_set
                 content=f"User {instance.username} sent you a friend request.",
             )
 
-@receiver(post_save, sender=Notification)
-def create_mention_notification(sender, instance, created, **kwargs):
-    if created and instance.notification_type == 'MENTION':
+@receiver(post_save, sender=Comment)
+def create_comment_and_mention_notification(sender, instance, created, **kwargs):
+    if created:
+        # Create a comment notification
         Notification.objects.create(
-            user=instance.user,
-            notification_type='MENTION',
-            content=instance.content
+            user=instance.post.user,
+            notification_type='COMMENT',
+            content=f"User {instance.user.username} commented on your post.",
         )
+        
+        # Detect mentions and create mention notifications
+        mentioned_usernames = re.findall(r'@(\w+)', instance.content)
+        for username in mentioned_usernames:
+            try:
+                mentioned_user = User.objects.get(username=username)
+                Notification.objects.create(
+                    user=mentioned_user,
+                    notification_type='MENTION',
+                    content=f"User {instance.user.username} mentioned you in a comment.",
+                )
+            except User.DoesNotExist:
+                continue
