@@ -292,6 +292,8 @@ class PostViewSet(viewsets.ViewSet):
             post = Post.objects.get(pk=pk)
         except Post.DoesNotExist:
             return Response({"detail": "Post not found."}, status=status.HTTP_404_NOT_FOUND)
+        if post.user != request.user:
+            return Response({"detail": "You do not have permission to update this post."}, status=status.HTTP_403_FORBIDDEN)
         serializer = PostSerializer(post, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -303,6 +305,8 @@ class PostViewSet(viewsets.ViewSet):
             post = Post.objects.get(pk=pk)
         except Post.DoesNotExist:
             return Response({"detail": "Post not found."}, status=status.HTTP_404_NOT_FOUND)
+        if post.user != request.user:
+            return Response({"detail": "You do not have permission to delete this post."}, status=status.HTTP_403_FORBIDDEN)
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
