@@ -314,6 +314,13 @@ def mark_notification_as_read(request, notification_id):
     except Notification.DoesNotExist:
         return Response({"detail": "Notification not found."}, status=status.HTTP_404_NOT_FOUND)
     
+
+
+
+
+
+
+
 class AllUsersAPIView(generics.ListAPIView):
     serializer_class = CustomUserSerializer
     permission_classes = [IsAuthenticated]
