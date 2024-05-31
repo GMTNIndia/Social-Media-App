@@ -1,6 +1,7 @@
 from rest_framework import generics, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.db.models import Q
+from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -309,6 +310,10 @@ class PostViewSet(viewsets.ViewSet):
             return Response({"detail": "You do not have permission to delete this post."}, status=status.HTTP_403_FORBIDDEN)
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
+    def post_count(self, request):
+        user_post_count = Post.objects.filter(user=request.user).count()
+        return Response({'user': request.user.email, 'post_count': user_post_count})
 
 
 class NotificationListView(generics.ListAPIView):
