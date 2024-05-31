@@ -29,7 +29,7 @@ urlpatterns = [
     path('api/posts/',
          PostViewSet.as_view({'post': 'create'}), name='post-create'),
     path("api/newsfeed/", NewsFeedView.as_view(), name="news_feed"),
-    path('api/posts/<int:pk>/likes/', LikeViewSet.as_view({'get': 'list', 'post': 'create'}), name='like-list'),
+    path('api/posts/<int:pk>/likes/', LikeViewSet.as_view({'get': 'list', 'post': 'create', 'delete': 'destroy'  }), name='like-list'),
     path('api/posts/<int:pk>/comments/', CommentViewSet.as_view({'get': 'list', 'post': 'create'}), name='comment-list'),
     path('api/posts/<int:post_id>/share/', SharePostView.as_view(), name='share-post'),
     path("api/users/<int:user_id>/follow/", FollowUserView.as_view(), name="follow-user"),
