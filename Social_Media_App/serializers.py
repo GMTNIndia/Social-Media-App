@@ -227,6 +227,15 @@ class NotificationSerializer(serializers.ModelSerializer):
 
 
 class MessageSerializer(serializers.ModelSerializer):
+    profile_photo = serializers.SerializerMethodField()
+    
     class Meta:
         model = Message
-        fields = '__all__'
+        fields = ['id', 'sender', 'receiver', 'message', 'timestamp', 'profile_photo']
+
+    def get_profile_photo(self, obj):
+        if self.context['request'].user == obj.sender:
+            return obj.sender.profile_photo.url if obj.sender.profile_photo else None
+        elif self.context['request'].user == obj.receiver:
+            return obj.receiver.profile_photo.url if obj.receiver.profile_photo else None
+        return None
