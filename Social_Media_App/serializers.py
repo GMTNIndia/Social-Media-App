@@ -223,7 +223,7 @@ class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = ['id', 'user', 'username', 'notification_type',
-                  'content', 'read', 'created_on']
+                  'message', 'read', 'created_on']
 
 
 class MessageSerializer(serializers.ModelSerializer):
