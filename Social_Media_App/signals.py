@@ -12,7 +12,7 @@ def create_like_notification(sender, instance, created, **kwargs):
         Notification.objects.create(
             user=instance.post.user,
             notification_type='LIKE',
-            content=f"User {instance.user.username} liked your post.",
+            message=f"User {instance.user.username} liked your post.",
         )
 
 # @receiver(post_save, sender=Comment)
@@ -43,7 +43,7 @@ def create_friend_request_notification(sender, instance, action, reverse, pk_set
             Notification.objects.create(
                 user=followed_user,
                 notification_type='FR',
-                content=f"User {instance.username} sent you a friend request.",
+                message=f"User {instance.username} sent you a friend request.",
             )
 
 @receiver(post_save, sender=Comment)
@@ -53,7 +53,7 @@ def create_comment_and_mention_notification(sender, instance, created, **kwargs)
         Notification.objects.create(
             user=instance.post.user,
             notification_type='COMMENT',
-            content=f"User {instance.user.username} commented on your post.",
+            message=f"User {instance.user.username} commented on your post.",
         )
         
         # Detect mentions and create mention notifications
@@ -64,7 +64,17 @@ def create_comment_and_mention_notification(sender, instance, created, **kwargs)
                 Notification.objects.create(
                     user=mentioned_user,
                     notification_type='MENTION',
-                    content=f"User {instance.user.username} mentioned you in a comment.",
+                    message=f"User {instance.user.username} mentioned you in a comment.",
                 )
             except User.DoesNotExist:
                 continue
+            
+@receiver(post_save, sender=Message)
+def create_message_notification(sender, instance, created, **kwargs):
+    if created:
+        # Create a notification for the receiver
+        Notification.objects.create(
+            user=instance.receiver,
+            notification_type='MSG',
+            message=f"User {instance.sender.username} sent you a message.",
+        )

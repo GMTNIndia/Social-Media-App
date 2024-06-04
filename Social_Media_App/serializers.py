@@ -17,8 +17,10 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "username",
             "password",
             "confirm_password",
+            "profile_photo",
             "created_on",
             "updated_on",
+           
         ]
         extra_kwargs = {"password": {"write_only": True}}
 
@@ -53,6 +55,8 @@ class ProfilePhotoUpdateSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
+    profile_photo = serializers.SerializerMethodField()
+
     class Meta:
         model = Post
         fields = [
@@ -60,9 +64,13 @@ class PostSerializer(serializers.ModelSerializer):
             "user",
             "content",
             "image",
+            "profile_photo",
             "created_on",
             "updated_on",
         ]
+
+    def get_profile_photo(self, obj):
+        return obj.user.profile_photo.url if obj.user.profile_photo else None
 
 
 class StorySerializer(serializers.ModelSerializer):
@@ -223,10 +231,20 @@ class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = ['id', 'user', 'username', 'notification_type',
-                  'content', 'read', 'created_on']
+                  'message', 'read', 'created_on']
 
 
 class MessageSerializer(serializers.ModelSerializer):
+    profile_photo = serializers.SerializerMethodField()
+
     class Meta:
         model = Message
-        fields = '__all__'
+        fields = ['id', 'sender', 'receiver',
+                  'message', 'timestamp', 'profile_photo']
+
+    def get_profile_photo(self, obj):
+        if self.context['request'].user == obj.sender:
+            return obj.sender.profile_photo.url if obj.sender.profile_photo else None
+        elif self.context['request'].user == obj.receiver:
+            return obj.receiver.profile_photo.url if obj.receiver.profile_photo else None
+        return None

@@ -115,7 +115,7 @@ class Notification(models.Model):
         CustomUser, on_delete=models.CASCADE, related_name='notifications')
     notification_type = models.CharField(
         max_length=20, choices=NOTIFICATION_TYPES)
-    content = models.TextField()
+    message = models.TextField()
     read = models.BooleanField(default=False)
     created_on = models.DateTimeField(auto_now_add=True)
 
@@ -128,5 +128,5 @@ class Message(models.Model):
         User, on_delete=models.CASCADE, related_name='sent_messages')
     receiver = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='received_messages', default=None)
-    content = models.TextField()
+    message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
