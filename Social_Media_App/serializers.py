@@ -53,6 +53,7 @@ class ProfilePhotoUpdateSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
+    profile_photo = serializers.SerializerMethodField()
     class Meta:
         model = Post
         fields = [
@@ -60,9 +61,13 @@ class PostSerializer(serializers.ModelSerializer):
             "user",
             "content",
             "image",
+            "profile_photo",
             "created_on",
             "updated_on",
         ]
+        
+    def get_profile_photo(self, obj):
+        return obj.user.profile_photo.url if obj.user.profile_photo else None
 
 
 class StorySerializer(serializers.ModelSerializer):
