@@ -500,6 +500,7 @@ function ChatPage() {
     <div className="flex flex-col  pb-20 bg-gray-100">
       <main className="flex flex-col self-center mt-[120px] w-full max-w-[1140px] max-md:max-w-full">
         <section className="max-md:max-w-full">
+          <center><h1>Chat Page</h1></center>
           <div className="flex gap-5 max-md:flex-col max-md:gap-0">
             <aside className="flex flex-col w-[24%] max-md:ml-0 max-md:w-full">
               <div className="flex flex-col px-4 py-5 mx-auto w-full bg-white rounded-lg border border-solid shadow-sm border-zinc-200 max-md:mt-5">
