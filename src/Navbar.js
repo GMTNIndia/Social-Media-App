@@ -83,7 +83,7 @@ const Header = () => {
     
         {isLoggedIn && (
           <div className="flex gap-5 text-stone-500 max-md:gap-2 flex-wrap">
-            <Link to="/home" className={`flex flex-col justify-center items-center p-1.5 max-md:px-3 ${getLinkClass('/')}`}>
+            <Link to="/" className={`flex flex-col justify-center items-center p-1.5 max-md:px-3 ${getLinkClass('/')}`}>
               <img
                 loading="lazy"
                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/b1664f17de31a74869a435d8245a5bff6a6099341af5e4e18cffe780333ba51a?apiKey=87da4b67ae5046fdba58e532f6a97e48&"
