@@ -52,6 +52,8 @@ urlpatterns = [
     path('all-users/', AllUsersAPIView.as_view(), name='all-users'),
     path('chat/<int:user_id>/<int:partner_id>/', ChatHistoryAPIView.as_view(), name='chat-history'),
     path('send-message/', SendMessageAPIView.as_view(), name='send-message'),
+     path('api/request-otp/', OTPRequestView.as_view(), name='request-otp'),
+    path('api/reset-password/', PasswordResetView.as_view(), name='reset-password'),
     path("api/", include(router.urls)),
 ]
 

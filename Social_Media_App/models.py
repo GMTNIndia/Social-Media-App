@@ -22,6 +22,8 @@ class CustomUser(AbstractUser):
     updated_on = models.DateTimeField(auto_now=True)
     following = models.ManyToManyField(
         'self', symmetrical=False, related_name='followers')
+    otp = models.CharField(max_length=6, blank=True, null=True)
+    otp_expiration = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
         return self.username

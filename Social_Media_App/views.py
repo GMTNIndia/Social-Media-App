@@ -15,7 +15,10 @@ from .serializers import (
     StorySerializer,
     CommentSerializer,
     LikeSerializer,
-    SharedPostSerializer, NotificationSerializer
+    SharedPostSerializer, 
+    NotificationSerializer,
+    OTPRequestSerializer, 
+    PasswordResetSerializer,
 )
 from .serializers import *
 from django.utils import timezone
@@ -373,3 +376,48 @@ class SendMessageAPIView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    
+class OTPRequestView(APIView):
+    def post(self, request):
+        serializer = OTPRequestSerializer(data=request.data)
+        if serializer.is_valid():
+            mobile_number = serializer.validated_data['mobile_number']
+            try:
+                user = CustomUser.objects.get(mobile_number=mobile_number)
+                otp = get_random_string(length=6, allowed_chars='0123456789')
+                user.otp = otp
+                user.otp_expiration = timezone.now() + timedelta(minutes=10)
+                user.save()
+                
+                # Send OTP using Twilio
+                client = Client('TWILIO_ACCOUNT_SID', 'TWILIO_AUTH_TOKEN')
+                client.messages.create(
+                    body=f"Your OTP is {otp}",
+                    from_='TWILIO_PHONE_NUMBER',
+                    to=f'+91{mobile_number}'
+                )
+                return Response({"detail": "OTP sent successfully."}, status=status.HTTP_200_OK)
+            except CustomUser.DoesNotExist:
+                return Response({"detail": "User with this mobile number does not exist."}, status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PasswordResetView(APIView):
+    def post(self, request):
+        serializer = PasswordResetSerializer(data=request.data)
+        if serializer.is_valid():
+            mobile_number = serializer.validated_data['mobile_number']
+            otp = serializer.validated_data['otp']
+            new_password = serializer.validated_data['new_password']
+            try:
+                user = CustomUser.objects.get(mobile_number=mobile_number, otp=otp)
+                if timezone.now() > user.otp_expiration:
+                    return Response({"detail": "OTP has expired."}, status=status.HTTP_400_BAD_REQUEST)
+                user.set_password(new_password)
+                user.otp = None
+                user.otp_expiration = None
+                user.save()
+                return Response({"detail": "Password reset successfully."}, status=status.HTTP_200_OK)
+            except CustomUser.DoesNotExist:
+                return Response({"detail": "Invalid OTP or mobile number."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -248,3 +248,18 @@ class MessageSerializer(serializers.ModelSerializer):
         elif self.context['request'].user == obj.receiver:
             return obj.receiver.profile_photo.url if obj.receiver.profile_photo else None
         return None
+
+
+class OTPRequestSerializer(serializers.Serializer):
+    mobile_number = serializers.CharField()
+
+class PasswordResetSerializer(serializers.Serializer):
+    mobile_number = serializers.CharField()
+    otp = serializers.CharField()
+    new_password = serializers.CharField(write_only=True)
+    confirm_password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        if data['new_password'] != data['confirm_password']:
+            raise serializers.ValidationError("Passwords do not match.")
+        return data
