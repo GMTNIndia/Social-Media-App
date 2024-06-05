@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.db.models import Q
@@ -312,11 +313,12 @@ class PostViewSet(viewsets.ViewSet):
         if post.user != request.user:
             return Response({"detail": "You do not have permission to delete this post."}, status=status.HTTP_403_FORBIDDEN)
         post.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
-    def post_count(self, request):
-        user_post_count = Post.objects.filter(user=request.user).count()
-        return Response({'user': request.user.email, 'post_count': user_post_count})
+        return Response(status=status.HTTP_204_NO_CONTENT)    
+    @action(detail=True, methods=['get'], url_path='post_count', permission_classes=[IsAuthenticated])
+    def post_count(self, request, pk=None):
+        user = get_object_or_404(CustomUser, pk=pk)
+        user_post_count = Post.objects.filter(user=user).count()
+        return Response({'user': user.email, 'post_count': user_post_count})
 
 
 class NotificationListView(generics.ListAPIView):
