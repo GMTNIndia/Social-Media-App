@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import manish from './manish.jpg';
+import manish from '../components/profile.jpg';
 import like from './heart.png';
 import comment from './chat-bubble.png';
 import Modal from 'react-modal';
@@ -273,11 +273,7 @@ function MainContent() {
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <img 
-            //  src={}
-            // src={profileImage}
-           src={`http://127.0.0.1:8000${post.profile_photo}`} 
-              // src={`http://localhost:8000/${post.profile_photo}`}
-            
+                src={post.profile_photo ? `http://127.0.0.1:8000${post.profile_photo}` : manish}
               className="rounded-full w-10 h-10" />
              
               <div className="ml-2">

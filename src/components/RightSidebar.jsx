@@ -10,13 +10,15 @@ function Sidebar() {
   const [showSecondModal, setShowSecondModal] = useState(false); 
   const [image, setImage] = useState(null);
   const [profileImage, setProfileImage] = useState(manish); // Default image
-  const [followersCount, setFollowersCount] = useState(0);
   const [username, setUsername] = useState("");
-  const navigate = useNavigate(); // Initialize useNavigate hook
+  const [followers, setFollowers] = useState(0); 
+  const [posts, setPostCount] = useState(0);
+  const navigate = useNavigate(); 
+  
   useEffect(() => {
     const fetchuserData = async () => {
       try {
-        const userId = localStorage.getItem('userId'); // Assuming userId is stored in localStorage
+        const userId = localStorage.getItem('userId'); 
         const response = await axios.get(`http://127.0.0.1:8000/api/users/${userId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -24,7 +26,7 @@ function Sidebar() {
         });
         if (response.data) {
           setUsername(response.data.username); // Update username state
-          setFollowersCount(response.data.followers_count);
+         
           if (response.data.profile_photo) {
             setProfileImage(response.data.profile_photo);
           }
@@ -33,6 +35,7 @@ function Sidebar() {
         console.error('Error fetching profile data:', error.message);
       }
     };
+
     const fetchProfileImage = async () => {
       try {
         const response = await axios.get('http://127.0.0.1:8000/api/profile/photo/retrieve/', {
@@ -47,9 +50,44 @@ function Sidebar() {
         console.error('Error fetching profile image:', error.message);
       }
     };
-    // fetchProfileData();
+
+    const fetchFollowers = async () => {
+      try {
+        const userId = localStorage.getItem('userId'); // Assuming userId is stored in localStorage
+        const response = await axios.get(`http://127.0.0.1:8000/api/users/${userId}/followers/`, {
+          headers: {
+            Authorization:`Bearer ${localStorage.getItem('accessToken')}`,
+          },
+        });
+        if (response.data) {
+          setFollowers(response.data.followers.length); 
+          console.log(response.data.followers.length);// Assuming the API returns an array of followers
+        }
+      } catch (error) {
+        console.error('Error fetching followers:', error.message);
+      }
+    };
+    const fetchPostCount = async () => {
+      try {
+        const userId = localStorage.getItem('userId'); // Assuming userId is stored in localStorage
+        const response = await axios.get(`http://127.0.0.1:8000/api/posts/${userId}/post_count/`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          },
+        });
+        if (response.data) {
+          setPostCount(response.data.post_count);
+          console.log(response.data.post_count); // Log the post count
+        }
+      } catch (error) {
+        console.error('Error fetching post count:', error.message);
+      }
+    };
+
     fetchuserData();
     fetchProfileImage();
+    fetchFollowers();
+    fetchPostCount();
   }, []);
  
   const handleImageChange = (e) => {
@@ -92,7 +130,7 @@ function Sidebar() {
         }
       );
 
-      setProfileImage(`http://127.0.0.1:8000${response.data.profile_photo}`); // Update profile image with the new URL
+      setProfileImage("http://127.0.0.1:8000${response.data.profile_photo}"); // Update profile image with the new URL
       setShowModal(false);
       navigate('/');
       window.location.reload();
@@ -100,7 +138,7 @@ function Sidebar() {
       console.error('Error updating profile picture:', error.message);
     }
   };
-  // "w-full md:w-1/4 p-4
+
   return ( 
     <div className="fixed top-0 left-0 w-full md:w-1/4 p-4 h-full overflow-hidden mt-28">
       <div className="bg-white shadow rounded p-4">
@@ -110,7 +148,6 @@ function Sidebar() {
               src={profileImage}
               alt="Profile"
               className="rounded-full h-40 w-40 overflow-hidden"
-              // onClick={() => setShowSecondModal(true)} // Show the second modal when profile image is clicked
               style={{ cursor: 'pointer' }}
             />
             <div className="absolute bottom-0 right-0 transform translate-x-1/4 translate-y-1/4 bg-purple-500 rounded-full p-1">
@@ -143,10 +180,7 @@ function Sidebar() {
                   </div>
                   <div className="relative p-6 flex flex-row items-center" onDrop={handleImageChange} onDragOver={handleDragOver}>
                     <img
-                      // src={profileImage}
-                      // src={profileImage}
-                      src={`http://localhost:8000/${profileImage}`}
-                      
+                      src={"http://localhost:8000/${profileImage}"}
                       alt="Current Profile"
                       className="mr-4 max-w-[40%] max-h-[200px]"
                     />
@@ -172,7 +206,7 @@ function Sidebar() {
                       type="button"
                       onClick={handleSubmit}
                     >
-                      Upload 
+                      Save
                     </button>
                   </div>
                 </div>
@@ -182,14 +216,10 @@ function Sidebar() {
           </>
         )}
 
-       
-        
-        {/* <p className="text-sm ml-2 flex-1">{user.username}</p> */}
-        {/* Content */}
         <h2 className="text-center mt-5 text-lg font-semibold">{username}</h2>
         <div className="flex justify-between space-x-4 mt-4">
-          <p className="text-sm text-gray-600">{followersCount} Followers</p>
-          <p className="text-sm text-gray-600">2 Posts</p>
+          <p className="text-sm text-gray-600">{followers} Followers</p> {/* Display followers count */}
+          <p className="text-sm text-gray-600">{posts} Posts</p>
         </div>
       </div>
     </div>
@@ -197,4 +227,3 @@ function Sidebar() {
 }
 
 export default Sidebar;
-
