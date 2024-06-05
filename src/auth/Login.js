@@ -46,7 +46,7 @@ function Login() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen mt-20">
+    <div className="flex flex-col min-h-screen mt-28">
       {/* <Navbar /> */}
       <div className="flex flex-1 flex-col md:flex-row">
         <div className="w-full md:w-2/4 p-4 md:ml-20">
