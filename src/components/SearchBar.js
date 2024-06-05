@@ -131,7 +131,7 @@ function SearchBar() {
   return (
     <section className="bg-gray-100">
       <form
-        className="flex flex-col justify-center px-4 py-5 ml-[95px] mt-[120px]  bg-white rounded-lg border border-solid shadow-sm border-zinc-200 max-w-[730px]"
+        className="flex flex-col justify-center px-4 py-5 ml-[120px] mt-[120px]  bg-white rounded-lg border border-solid shadow-sm border-zinc-200 max-w-[730px]"
         onSubmit={handleSubmit}
       >
         <section className="flex gap-4 px-[754] py-[48] max-md:flex-wrap max-md:max-w-full">
