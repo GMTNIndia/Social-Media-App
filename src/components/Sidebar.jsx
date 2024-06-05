@@ -179,31 +179,6 @@ function RightSidebar() {
           ))}
         </div>
       </div>
-      <div className="bg-white shadow rounded p-4 h-full overflow-y-auto">
-        <h3 className="font-semibold mb-2">Trends</h3>
-        <ul className="space-y-2">
-          <li className='flex items-center justify-between'>
-            <a href="#" className="text-purple-600 text-sm">#Expressjs</a> 
-            <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
-          </li>
-          <li className='flex items-center justify-between'>
-            <a href="#" className="text-purple-600 text-sm">#Nextjs</a> 
-            <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
-          </li>
-          <li className='flex items-center justify-between'>
-            <a href="#" className="text-purple-600 text-sm">#ReactJs</a> 
-            <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
-          </li>
-          <li className='flex items-center justify-between'>
-            <a href="#" className="text-purple-600 text-sm">#GenerativeAI</a> 
-            <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
-          </li>
-          <li className='flex items-center justify-between'>
-            <a href="#" className="text-purple-600 text-sm">#Postman</a> 
-            <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
-          </li>
-        </ul>
-      </div>
     </div>
   );
 }

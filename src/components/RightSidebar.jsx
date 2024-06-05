@@ -172,7 +172,7 @@ function Sidebar() {
                       type="button"
                       onClick={handleSubmit}
                     >
-                      Save
+                      Upload 
                     </button>
                   </div>
                 </div>
