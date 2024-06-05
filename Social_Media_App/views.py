@@ -28,6 +28,10 @@ from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
 from rest_framework.generics import ListAPIView
+from datetime import timedelta
+from django.utils.crypto import get_random_string
+from twilio.rest import Client
+
 
 
 class UserCreateView(generics.CreateAPIView):
