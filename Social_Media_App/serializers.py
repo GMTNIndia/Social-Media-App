@@ -1,7 +1,21 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import CustomUser, Post, Story, Comment, Like, SharedPost, Notification, Message
-
+from .models import (
+    CustomUser, 
+    Post, 
+    Story, 
+    Comment, 
+    Like, 
+    SharedPost, 
+    Notification, 
+    Message,
+    PasswordResetOTP
+)
+from django.contrib.auth import get_user_model
+from django.utils import timezone
+from django.utils.crypto import get_random_string
+from django.core.mail import send_mail
+from datetime import timedelta
 
 class CustomUserSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True)
@@ -248,18 +262,65 @@ class MessageSerializer(serializers.ModelSerializer):
         elif self.context['request'].user == obj.receiver:
             return obj.receiver.profile_photo.url if obj.receiver.profile_photo else None
         return None
-
-
-class OTPRequestSerializer(serializers.Serializer):
-    mobile_number = serializers.CharField()
-
+    
 class PasswordResetSerializer(serializers.Serializer):
-    mobile_number = serializers.CharField()
-    otp = serializers.CharField()
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        try:
+            self.user = get_user_model().objects.get(email=value)
+        except get_user_model().DoesNotExist:
+            raise serializers.ValidationError("User with this email does not exist.")
+        return value
+
+    def save(self):
+        otp = get_random_string(length=6, allowed_chars='0123456789')
+        expires_at = timezone.now() + timedelta(minutes=10)
+        PasswordResetOTP.objects.create(user=self.user, otp=otp, expires_at=expires_at)
+        send_mail(
+            'Your OTP for Password Reset',
+            f'Your OTP is {otp}. It is valid for 10 minutes.',
+            'from@example.com',
+            [self.user.email],
+        )
+
+
+class OTPVerificationSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    otp = serializers.CharField(max_length=6)
+
+    def validate(self, data):
+        try:
+            self.user = get_user_model().objects.get(email=data['email'])
+            otp_record = PasswordResetOTP.objects.get(user=self.user, otp=data['otp'])
+            if not otp_record.is_valid():
+                raise serializers.ValidationError("OTP has expired.")
+        except (get_user_model().DoesNotExist, PasswordResetOTP.DoesNotExist):
+            raise serializers.ValidationError("Invalid OTP or email.")
+        return data
+
+    def save(self):
+        return self.user
+
+
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    otp = serializers.CharField(max_length=6)
     new_password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(write_only=True)
 
     def validate(self, data):
         if data['new_password'] != data['confirm_password']:
             raise serializers.ValidationError("Passwords do not match.")
+        try:
+            self.user = get_user_model().objects.get(email=data['email'])
+            otp_record = PasswordResetOTP.objects.get(user=self.user, otp=data['otp'])
+            if not otp_record.is_valid():
+                raise serializers.ValidationError("OTP has expired.")
+        except (get_user_model().DoesNotExist, PasswordResetOTP.DoesNotExist):
+            raise serializers.ValidationError("Invalid OTP or email.")
         return data
+
+    def save(self):
+        self.user.set_password(self.validated_data['new_password'])
+        self.user.save()
