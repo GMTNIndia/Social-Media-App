@@ -185,14 +185,107 @@
 
 // export default RightSidebar;
 
+// import React, { useEffect, useState } from 'react';
+// import axios from 'axios';
+// import manish from '../components/profile.jpg';
+
+// function RightSidebar() {
+//   const [users, setUsers] = useState([]);
+//   const token = localStorage.getItem('accessToken');
+//   const [image, setImage] = useState(null);
+//   const [profileImage, setProfileImage] = useState(manish);
+
+//   useEffect(() => {
+//     // Fetch users from the API
+//     axios.get('http://127.0.0.1:8000/all-users/', {
+//       headers: {
+//         'Authorization': `Bearer ${token}`
+//       }
+//     })
+//     .then(response => {
+//       setUsers(response.data);
+//     })
+//     .catch(error => {
+//       console.error('There was an error fetching the users!', error);
+//     });
+//   }, [token]);
+
+//   const handleFollow = (userId) => {
+//     axios.post(`http://127.0.0.1:8000/api/users/${userId}/follow/`, {}, {
+//       headers: {
+//         'Authorization': `Bearer ${token}`
+//       }
+//     })
+//     .then(response => {
+//       console.log('Followed successfully:', response.data);
+//       // Optionally, update the UI to reflect the follow status
+//     })
+//     .catch(error => {
+//       console.error('There was an error following the user!', error);
+//     });
+//   };
+
+//   return (
+//     <div className="fixed top-0 right-0 w-full md:w-1/4 p-4 h-full overflow-hidden mt-28">
+//       <div className="bg-white shadow rounded p-4 mb-4">
+//         <h3 className="font-semibold mb-2">People you may know</h3>
+//         <div className="space-y-4 mt-4">
+//           {users.map(user => (
+//             <div key={user.id} className="flex items-center justify-between">
+//               <img 
+//                 src={user.profile_photo || manish}
+//                 alt="Profile" 
+//                 className="rounded-full w-10 h-10" 
+//               />
+//               <p className="text-sm ml-2 flex-1">{user.username}</p>
+//               <button 
+//                 className="bg-purple-600 text-white px-4 py-2 rounded"
+//                 onClick={() => handleFollow(user.id)}
+//               >
+//                 Follow
+//               </button>
+//             </div>
+//           ))}
+//         </div>
+//       </div>
+//       <div className="bg-white shadow rounded p-4">
+//         <h3 className="font-semibold mb-2">Trends</h3>
+//         <ul className="space-y-2">
+//           <li className='flex items-center justify-between'>
+//             <a href="#" className="text-purple-600 text-sm">#Expressjs</a> 
+//             <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
+//           </li>
+//           <li className='flex items-center justify-between'>
+//             <a href="#" className="text-purple-600 text-sm">#Nextjs</a> 
+//             <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
+//           </li>
+//           <li className='flex items-center justify-between'>
+//             <a href="#" className="text-purple-600 text-sm">#ReactJs</a> 
+//             <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
+//           </li>
+//           <li className='flex items-center justify-between'>
+//             <a href="#" className="text-purple-600 text-sm">#GenerativeAI</a> 
+//             <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
+//           </li>
+//           <li className='flex items-center justify-between'>
+//             <a href="#" className="text-purple-600 text-sm">#Postman</a> 
+//             <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
+//           </li>
+//         </ul>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default RightSidebar;
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import manish from '../components/profile.jpg';
 
 function RightSidebar() {
   const [users, setUsers] = useState([]);
+  const [followStatus, setFollowStatus] = useState({});
   const token = localStorage.getItem('accessToken');
-  const [image, setImage] = useState(null);
   const [profileImage, setProfileImage] = useState(manish);
 
   useEffect(() => {
@@ -204,6 +297,11 @@ function RightSidebar() {
     })
     .then(response => {
       setUsers(response.data);
+      const initialFollowStatus = response.data.reduce((acc, user) => {
+        acc[user.id] = user.is_following; // assuming API returns if the user is followed
+        return acc;
+      }, {});
+      setFollowStatus(initialFollowStatus);
     })
     .catch(error => {
       console.error('There was an error fetching the users!', error);
@@ -211,23 +309,30 @@ function RightSidebar() {
   }, [token]);
 
   const handleFollow = (userId) => {
-    axios.post(`http://127.0.0.1:8000/api/users/${userId}/follow/`, {}, {
+    const isFollowing = followStatus[userId];
+    const url = `http://127.0.0.1:8000/api/users/${userId}/${isFollowing ? 'unfollow' : 'follow'}/`;
+
+    axios.post(url, {}, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
     })
     .then(response => {
-      console.log('Followed successfully:', response.data);
-      // Optionally, update the UI to reflect the follow status
+      console.log(`${isFollowing ? 'Unfollowed' : 'Followed'} successfully:`, response.data);
+      setFollowStatus(prevState => ({
+        ...prevState,
+        [userId]: !isFollowing
+      }));
     })
     .catch(error => {
-      console.error('There was an error following the user!', error);
+      console.error(`There was an error ${isFollowing ? 'unfollowing' : 'following'} the user!`, error);
     });
   };
 
   return (
     <div className="fixed top-0 right-0 w-full md:w-1/4 p-4 h-full overflow-hidden mt-28">
-      <div className="bg-white shadow rounded p-4 mb-4">
+      {/* <div className="bg-white shadow rounded p-4 mb-4"> */}
+      <div className="bg-white shadow rounded p-4 mb-4 h-72 overflow-auto">
         <h3 className="font-semibold mb-2">People you may know</h3>
         <div className="space-y-4 mt-4">
           {users.map(user => (
@@ -239,40 +344,16 @@ function RightSidebar() {
               />
               <p className="text-sm ml-2 flex-1">{user.username}</p>
               <button 
-                className="bg-purple-600 text-white px-4 py-2 rounded"
+                className={`px-4 py-2 rounded ${followStatus[user.id] ? 'bg-red-600' : 'bg-purple-600'} text-white`}
                 onClick={() => handleFollow(user.id)}
               >
-                Follow
+                {followStatus[user.id] ? 'Unfollow' : 'Follow'}
               </button>
             </div>
           ))}
         </div>
       </div>
-      <div className="bg-white shadow rounded p-4">
-        <h3 className="font-semibold mb-2">Trends</h3>
-        <ul className="space-y-2">
-          <li className='flex items-center justify-between'>
-            <a href="#" className="text-purple-600 text-sm">#Expressjs</a> 
-            <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
-          </li>
-          <li className='flex items-center justify-between'>
-            <a href="#" className="text-purple-600 text-sm">#Nextjs</a> 
-            <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
-          </li>
-          <li className='flex items-center justify-between'>
-            <a href="#" className="text-purple-600 text-sm">#ReactJs</a> 
-            <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
-          </li>
-          <li className='flex items-center justify-between'>
-            <a href="#" className="text-purple-600 text-sm">#GenerativeAI</a> 
-            <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
-          </li>
-          <li className='flex items-center justify-between'>
-            <a href="#" className="text-purple-600 text-sm">#Postman</a> 
-            <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
-          </li>
-        </ul>
-      </div>
+
     </div>
   );
 }
