@@ -345,6 +345,7 @@ function RightSidebar() {
               <p className="text-sm ml-2 flex-1">{user.username}</p>
               <button 
                 className={`px-4 py-2 rounded ${followStatus[user.id] ? 'bg-red-600' : 'bg-purple-600'} text-white`}
+                style={{ width: '6rem' }}
                 onClick={() => handleFollow(user.id)}
               >
                 {followStatus[user.id] ? 'Unfollow' : 'Follow'}

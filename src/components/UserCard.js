@@ -30,6 +30,7 @@ function FriendSuggestion({ profile_photo, username, userId, isFollowed, onFollo
       </div>
       <button
         className={`justify-center self-start p-3 font-semibold whitespace-nowrap rounded-md ${isFollowed ? 'bg-red-600 text-white' : 'bg-purple-700 text-gray-100'}`}
+        style={{ minWidth: '6rem' }} // Adjust the width as needed
         onClick={() => onFollowToggle(userId)}
       >
         {isFollowed ? 'Unfollow' : 'Follow'}
@@ -37,6 +38,8 @@ function FriendSuggestion({ profile_photo, username, userId, isFollowed, onFollo
     </div>
   );
 }
+
+  
 
 function MyComponent({ searchResults }) {
   const [users, setUsers] = useState([]);
@@ -115,7 +118,7 @@ function MyComponent({ searchResults }) {
           </section>
           <aside className="flex flex-col ml-5 w-[26%] max-md:ml-0 max-md:w-full">
             <section className="flex flex-col max-md:mt-5">
-              <section className="flex flex-col p-4 w-full text-xs bg-white rounded-lg border border-solid shadow-sm border-zinc-200 overflow-y-auto max-h-[500px]">
+              <section className="flex flex-col p-4 mt-3.5 w-full text-xs bg-white rounded-lg border border-solid shadow-sm border-zinc-200 overflow-y-auto max-h-[500px]">
                 <h2 className="text-sm font-semibold text-neutral-900">People you may know</h2>
                 {searchResults.map((result, index) => (
                   <FriendSuggestion

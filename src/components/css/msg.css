@@ -1,0 +1,40 @@
+.message {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.message-sent {
+  align-self: flex-end;
+  background-color: #dcf8c6;
+  border-radius: 20px 20px 0 20px;
+  padding: 10px;
+  max-width: 60%;
+}
+
+.message-received {
+  align-self: flex-start;
+  background-color: #fff;
+  border-radius: 20px 20px 20px 0;
+  padding: 10px;
+  max-width: 60%;
+}
+
+.message-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.message-timestamp {
+  align-self: flex-end;
+  font-size: 0.75em;
+  color: #888;
+  margin-top: 5px;
+}
+
+.message-sender {
+  align-self: flex-start;
+  font-size: 0.75em;
+  color: #888;
+  margin-top: 5px;
+}

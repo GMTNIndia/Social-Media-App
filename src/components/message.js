@@ -6,13 +6,13 @@ function Message({ message, timestamp, Sender, Receiver, userId }) {
   const isSentByCurrentUser = Sender === userId;
 
   return (
-    <section>
+    <div>
       {isSentByCurrentUser ? (
         <SenderMessage message={message} timestamp={timestamp}  />
       ) : (
         <ReceiverMessage message={message} timestamp={timestamp} Receiver={Receiver} />
       )}
-    </section>
+    </div>
   );
 }
 
