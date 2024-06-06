@@ -330,7 +330,7 @@ function RightSidebar() {
   };
 
   return (
-    <div className="fixed top-0 right-0 w-full md:w-1/4 p-4 h-full overflow-hidden mt-28">
+    <div className="fixed top-0 right-0 w-full md:w-1/4 p-4 h-full overflow-hidden mt-32">
       {/* <div className="bg-white shadow rounded p-4 mb-4"> */}
       <div className="bg-white shadow rounded p-4 mb-4 h-72 overflow-auto">
         <h3 className="font-semibold mb-2">People you may know</h3>

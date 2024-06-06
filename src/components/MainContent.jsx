@@ -271,7 +271,7 @@ function MainContent() {
   };
 
   return (
-  <div className="w-full md:w-2/4 mt-28 p-4 mx-auto">
+  <div className="w-full md:w-2/4 mt-32 p-4 mx-auto">
        {/* <Notifications /> */}
       
       <div className="bg-white shadow rounded p-4 mb-4">

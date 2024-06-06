@@ -140,7 +140,7 @@ function Sidebar() {
   };
 
   return ( 
-    <div className="fixed top-0 left-0 w-full md:w-1/4 p-4 h-full overflow-hidden mt-28">
+    <div className="fixed top-0 left-0 w-full md:w-1/4 p-4 h-full overflow-hidden mt-32">
       <div className="bg-white shadow rounded p-4">
         <div className="flex justify-center">
           <div className="relative">
