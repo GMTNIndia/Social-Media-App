@@ -43,6 +43,7 @@ import ChatWindow from './components/ChatWindow';
 import Notifications from './Notification';
 import PrivateRoute from './PrivateRoute'; // Import PrivateRoute
 
+
 function App() {
   return (
     <div>
@@ -56,6 +57,7 @@ function App() {
           <Route path="/search" element={<PrivateRoute element={<SearchBar />} />} />
           <Route path="/chat" element={<PrivateRoute element={<ChatWindow />} />} />
           <Route path="/notification" element={<PrivateRoute element={<Notifications />} />} />
+     
         </Routes>
       </BrowserRouter>
     </div>
