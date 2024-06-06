@@ -9,8 +9,7 @@ from django.contrib.auth import get_user_model
 
 
 class CustomUser(AbstractUser):
-    email = models.EmailField(
-        max_length=100, unique=True, null=False, blank=False)
+    email = models.EmailField(max_length=100, unique=True, null=False, blank=False)
     mobile_regex = RegexValidator(regex=r"^[6-9]\d{9}$")
     mobile_number = models.CharField(
         validators=[mobile_regex], max_length=10, unique=True, null=False, blank=False
@@ -21,7 +20,8 @@ class CustomUser(AbstractUser):
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     following = models.ManyToManyField(
-        'self', symmetrical=False, related_name='followers')
+        "self", symmetrical=False, related_name="followers"
+    )
 
     def __str__(self):
         return self.username
@@ -42,8 +42,8 @@ User = get_user_model()
 class Story(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='story_images/', null=True, blank=True)
-    video = models.FileField(upload_to='story_videos/', null=True, blank=True)
+    image = models.ImageField(upload_to="story_images/", null=True, blank=True)
+    video = models.FileField(upload_to="story_videos/", null=True, blank=True)
     link = models.URLField(null=True, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     expires_on = models.DateTimeField(editable=False)
@@ -59,8 +59,7 @@ class Story(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(
-        Post, on_delete=models.CASCADE, related_name='comments')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     content = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
@@ -71,13 +70,12 @@ class Comment(models.Model):
 
 
 class Like(models.Model):
-    post = models.ForeignKey(
-        Post, on_delete=models.CASCADE, related_name='likes')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="likes")
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('post', 'user')
+        unique_together = ("post", "user")
 
     def __str__(self):
         return f"{self.user.username} liked {self.post.id}"
@@ -85,12 +83,14 @@ class Like(models.Model):
 
 class SharedPost(models.Model):
     original_post = models.ForeignKey(
-        Post, on_delete=models.CASCADE, related_name='shared_posts')
+        Post, on_delete=models.CASCADE, related_name="shared_posts"
+    )
     shared_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     shared_on = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.shared_by.username} shared post {self.original_post.id}"
+
 
 # class Chat(models.Model):
 #     participants = models.ManyToManyField(CustomUser, related_name='chats')
@@ -105,16 +105,16 @@ class SharedPost(models.Model):
 
 class Notification(models.Model):
     NOTIFICATION_TYPES = (
-        ('FR', 'Friend Request'),
-        ('MSG', 'Message'),
-        ('MENTION', 'Mention'),
-        ('COMMENT', 'Comment'),
-        ('LIKE', 'Like'),
+        ("FR", "Friend Request"),
+        ("MSG", "Message"),
+        ("MENTION", "Mention"),
+        ("COMMENT", "Comment"),
+        ("LIKE", "Like"),
     )
     user = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, related_name='notifications')
-    notification_type = models.CharField(
-        max_length=20, choices=NOTIFICATION_TYPES)
+        CustomUser, on_delete=models.CASCADE, related_name="notifications"
+    )
+    notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
     message = models.TextField()
     read = models.BooleanField(default=False)
     created_on = models.DateTimeField(auto_now_add=True)
@@ -125,11 +125,14 @@ class Notification(models.Model):
 
 class Message(models.Model):
     sender = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='sent_messages')
+        User, on_delete=models.CASCADE, related_name="sent_messages"
+    )
     receiver = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='received_messages', default=None)
+        User, on_delete=models.CASCADE, related_name="received_messages", default=None
+    )
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+
 
 class PasswordResetOTP(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
