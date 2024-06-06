@@ -146,7 +146,7 @@ function SearchBar() {
             id="searchInput"
             value={searchTerm}
             onChange={handleInputChange}
-            placeholder="What are you looking for?"
+            placeholder="Find your friends here ?"
             aria-label="What are you looking for?"
           />
           <button
