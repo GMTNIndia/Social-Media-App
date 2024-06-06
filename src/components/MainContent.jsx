@@ -255,6 +255,7 @@ function MainContent() {
   return (
   <div className="w-full md:w-2/4 mt-28 p-4 mx-auto">
        {/* <Notifications /> */}
+      
       <div className="bg-white shadow rounded p-4 mb-4">
         <textarea
           className="w-full border rounded p-2"
@@ -310,12 +311,12 @@ function MainContent() {
           <p className="mt-5 text-sm">{post.content}</p>
           
           <div className="flex items-center justify-between mt-4">
-            <div className="flex items-center">
-              <button onClick={() => handleLike(post.id)} className="mr-2">
-                <img src={like} alt="Like" className="w-5 h-5" />
-              </button>
-              <span>{post.likes}</span>
-            </div>
+          <div className="flex items-center">
+            <button onClick={() => handleLike(post.id)} className="mr-2">
+               <img src={like} alt="Like" className="w-5 h-5" style={{ filter: 'brightness(80%) saturate(100%) invert(63%) sepia(100%) saturate(7492%) hue-rotate(359deg) brightness(115%) contrast(100%)' }} />
+            </button>
+           <span>{post.likes}</span>
+       </div>
             <div className="flex items-center">
               <button onClick={() => toggleComments(post.id)} className="mr-2">
                 <img src={comment} alt="Comment" className="w-5 h-5" />
