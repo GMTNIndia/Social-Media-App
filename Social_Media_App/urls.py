@@ -55,6 +55,7 @@ urlpatterns = [
     path('password-reset/', PasswordResetRequestView.as_view(), name='password_reset_request'),
     path('otp-verify/', OTPVerificationView.as_view(), name='otp_verification'),
     path('password-reset-confirm/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path("api/profile/photo/delete/", ProfilePhotoDeleteView.as_view(), name="profile_photo_delete"),
     path("api/", include(router.urls)),
 ]
 

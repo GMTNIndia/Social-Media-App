@@ -70,12 +70,15 @@ class ProfilePhotoUpdateSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     profile_photo = serializers.SerializerMethodField()
+    username = serializers.SerializerMethodField()
+
 
     class Meta:
         model = Post
         fields = [
             "id",
             "user",
+            "username"
             "content",
             "image",
             "profile_photo",
@@ -85,6 +88,10 @@ class PostSerializer(serializers.ModelSerializer):
 
     def get_profile_photo(self, obj):
         return obj.user.profile_photo.url if obj.user.profile_photo else None
+    
+    def get_username(self, obj):
+        return obj.user.username
+
 
 
 class StorySerializer(serializers.ModelSerializer):

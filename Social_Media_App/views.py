@@ -415,3 +415,13 @@ class PasswordResetConfirmView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({"message": "Password reset successful"}, status=status.HTTP_200_OK)
+    
+class ProfilePhotoDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request):
+        user = request.user
+        user.profile_photo.delete()  # Assuming the profile_photo is a FileField or ImageField
+        user.profile_photo = None
+        user.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
