@@ -1,10 +1,12 @@
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import manish from '../components/profile.jpg';
 import like from './heart.png';
 import comment from './chat-bubble.png';
 import Modal from 'react-modal';
+import { toast } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 
 Modal.setAppElement('#root');
@@ -24,6 +26,9 @@ function MainContent() {
   const [editContent, setEditContent] = useState('');
   const [editImage, setEditImage] = useState(null);
   const [username, setUsername] = useState("");
+  const [alertMessage, setAlertMessage] = useState(''); // State for the alert message
+  const [showAlert, setShowAlert] = useState(false); // State to show/hide the alert message
+
 
   useEffect(() => {
 
@@ -86,7 +91,7 @@ function MainContent() {
         })
       );
   
-      // Sort posts by created_on date in descending order
+    
       const sortedPosts = postsData.sort((a, b) => new Date(b.created_on) - new Date(a.created_on));
       
       setPosts(sortedPosts);
@@ -97,12 +102,21 @@ function MainContent() {
 
   const handleSubmit = async () => {
     const accessToken = localStorage.getItem('accessToken');
-
+   
     if (!userId || !accessToken) {
       console.error('User not logged in or access token missing');
       return;
     }
-
+    // !content &&
+      if ( !image) {
+      toast.error('Please  select an image');
+      return;
+    }
+    if ( !content) {
+      toast.error('Please enter content');
+      return;
+    }
+ 
     try {
       const formData = new FormData();
       formData.append('content', content);
@@ -120,6 +134,10 @@ function MainContent() {
       );
 
       console.log('Post created successfully:', response.data);
+      setAlertMessage('Post created successfully');
+      setShowAlert(true);
+      setTimeout(() => setShowAlert(false), 3000); // Hide alert after 3 seconds
+
       setContent('');
       setImage(null);
       fetchPosts();

@@ -42,6 +42,8 @@ import SearchBar from './components/SearchBar';
 import ChatWindow from './components/ChatWindow';
 import Notifications from './Notification';
 import PrivateRoute from './PrivateRoute'; // Import PrivateRoute
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
@@ -59,6 +61,7 @@ function App() {
           <Route path="/notification" element={<PrivateRoute element={<Notifications />} />} />
      
         </Routes>
+        <ToastContainer />
       </BrowserRouter>
     </div>
   );
