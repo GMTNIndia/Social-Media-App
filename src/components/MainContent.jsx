@@ -270,76 +270,81 @@ function MainContent() {
       </div>
 
       {posts.map(post => (
-        <div key={post.id} className="bg-white shadow rounded p-4 mb-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <img 
-                src={post.profile_photo ? `http://127.0.0.1:8000${post.profile_photo}` : manish}
-              className="rounded-full w-10 h-10" />
-             
-              <div className="ml-2">
-                <h3 className="text-sm font-semibold">{post.user.username}</h3>
-                <p className="text-xs text-gray-600">{new Date(post.created_on).toLocaleTimeString()}</p>
-              </div>
-            </div>
-            <div className="relative">
-              <button onClick={() => handleMenuToggle(post.id)} className="text-black">
-                &#x22EE;
-              </button>
-              {showMenu === post.id && (
-                <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg">
-                  <button
-                    onClick={() => handleEditPost(post)}
-                    className="block px-4 py-2 text-gray-800 hover:bg-gray-200 w-full text-left"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => {
-                      setSelectedPost(post);
-                      handleDeletePost();
-                    }}
-                    className="block px-4 py-2 text-gray-800 hover:bg-gray-200 w-full text-left"
-                  >
-                    Delete
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-          {post.image && <img src={`http://127.0.0.1:8000${post.image}`} alt="Post" className="mt-4 rounded w-full" />}
-          <p className="mt-5 text-sm">{post.content}</p>
-          
-          <div className="flex items-center justify-between mt-4">
-          <div className="flex items-center">
-            <button onClick={() => handleLike(post.id)} className="mr-2">
-               <img src={like} alt="Like" className="w-5 h-5" style={{ filter: 'brightness(80%) saturate(100%) invert(63%) sepia(100%) saturate(7492%) hue-rotate(359deg) brightness(115%) contrast(100%)' }} />
-            </button>
-           <span>{post.likes}</span>
-       </div>
-            <div className="flex items-center">
-              <button onClick={() => toggleComments(post.id)} className="mr-2">
-                <img src={comment} alt="Comment" className="w-5 h-5" />
-              </button>
-              <span>{post.comments}</span>
-            </div>
-          </div>
-          {showComments[post.id] && (
-            <div className="mt-4">
-              <Comments postId={post.id} />
-              <textarea
-                className="w-full border rounded p-2 mt-2"
-                placeholder="Write a comment..."
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-              ></textarea>
-              <button className="bg-gray-600 text-white px-4 py-2 mt-2 rounded" onClick={() => handleComment(post.id)}>
-                Comment
-              </button>
-            </div>
-          )}
+  <div key={post.id} className="bg-white shadow rounded p-4 mb-4">
+    <div className="flex items-center justify-between">
+      <div className="flex items-center">
+        <img 
+          src={post.profile_photo ? `http://127.0.0.1:8000${post.profile_photo}` : manish}
+          className="rounded-full w-10 h-10"
+        />
+        <div className="ml-2">
+          <h3 className="text-sm font-semibold">{post.user.username}</h3>
+          <p className="text-xs text-gray-600">{new Date(post.created_on).toLocaleTimeString()}</p>
         </div>
-      ))}
+      </div>
+      <div className="relative">
+        <button onClick={() => handleMenuToggle(post.id)} className="text-black">
+          &#x22EE;
+        </button>
+        {showMenu === post.id && (
+          <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg">
+            <button
+              onClick={() => handleEditPost(post)}
+              className="block px-4 py-2 text-gray-800 hover:bg-gray-200 w-full text-left"
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => {
+                setSelectedPost(post);
+                handleDeletePost();
+              }}
+              className="block px-4 py-2 text-gray-800 hover:bg-gray-200 w-full text-left"
+            >
+              Delete
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+    {post.image && post.image.endsWith('.mp4') ? ( // Check if the file is a video
+      <video src={`http://127.0.0.1:8000${post.image}`} controls className="mt-4 rounded w-full"></video>
+    ) : ( // Render image if it's not a video
+      <img src={`http://127.0.0.1:8000${post.image}`} alt="Post" className="mt-4 rounded w-full" />
+    )}
+    <p className="mt-5 text-sm">{post.content}</p>
+    
+    <div className="flex items-center justify-between mt-4">
+      <div className="flex items-center">
+        <button onClick={() => handleLike(post.id)} className="mr-2">
+           <img src={like} alt="Like" className="w-5 h-5" style={{ filter: 'brightness(80%) saturate(100%) invert(63%) sepia(100%) saturate(7492%) hue-rotate(359deg) brightness(115%) contrast(100%)' }} />
+        </button>
+       <span>{post.likes}</span>
+     </div>
+      <div className="flex items-center">
+        <button onClick={() => toggleComments(post.id)} className="mr-2">
+          <img src={comment} alt="Comment" className="w-5 h-5" />
+        </button>
+        <span>{post.comments}</span>
+      </div>
+    </div>
+    {showComments[post.id] && (
+      <div className="mt-4">
+        <Comments postId={post.id} />
+        <textarea
+          className="w-full border rounded p-2 mt-2"
+          placeholder="Write a comment..."
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+        ></textarea>
+        <button className="bg-gray-600 text-white px-4 py-2 mt-2 rounded" onClick={() => handleComment(post.id)}>
+          Comment
+        </button>
+      </div>
+    )}
+  </div>
+))}
+
 
       <Modal
         isOpen={modalIsOpen}
