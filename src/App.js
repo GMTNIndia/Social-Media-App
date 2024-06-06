@@ -44,6 +44,9 @@ import Notifications from './Notification';
 import PrivateRoute from './PrivateRoute'; // Import PrivateRoute
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ForgotPassword from './auth/Forgetpassword';
+import OtpVerificationPage from './auth/Otp';
+import ResetPassword from './auth/Reset-password';
 
 
 function App() {
@@ -59,7 +62,9 @@ function App() {
           <Route path="/search" element={<PrivateRoute element={<SearchBar />} />} />
           <Route path="/chat" element={<PrivateRoute element={<ChatWindow />} />} />
           <Route path="/notification" element={<PrivateRoute element={<Notifications />} />} />
-     
+          <Route path="/password-reset-confirm" element={<ResetPassword/>} />
+          <Route path="/forgot-password" element={<ForgotPassword/>} />
+          <Route path="/otp-verify" element={<OtpVerificationPage/>} />
         </Routes>
         <ToastContainer />
       </BrowserRouter>
