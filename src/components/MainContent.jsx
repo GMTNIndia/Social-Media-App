@@ -364,10 +364,16 @@ function MainContent() {
 ))}
 
 
-      <Modal
+<Modal
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
         contentLabel="Edit Post Modal"
+        style={{
+    content: {
+      height: '300px', // Set the height of the modal content to 300px
+      marginTop: '100px', // Add a top margin of 100px
+    }
+  }}
       >
         <h2>Edit Post</h2>
         <textarea
