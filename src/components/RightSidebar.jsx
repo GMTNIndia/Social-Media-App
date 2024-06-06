@@ -242,6 +242,7 @@ function Sidebar() {
   const [profileImage, setProfileImage] = useState(manish); // Default image
   const [username, setUsername] = useState("");
   const [followers, setFollowers] = useState(0); // State for followers count
+  const [posts, setPostCount] = useState(0);
   const navigate = useNavigate(); // Initialize useNavigate hook
   
   useEffect(() => {
@@ -297,9 +298,27 @@ function Sidebar() {
       }
     };
 
+    const fetchPostCount = async () => {
+            try {
+              const userId = localStorage.getItem('userId'); // Assuming userId is stored in localStorage
+              const response = await axios.get(`http://127.0.0.1:8000/api/posts/${userId}/post_count/`, {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                },
+              });
+              if (response.data) {
+                setPostCount(response.data.post_count);
+                console.log(response.data.post_count); // Log the post count
+              }
+            } catch (error) {
+              console.error('Error fetching post count:', error.message);
+            }
+          };
+
     fetchuserData();
     fetchProfileImage();
     fetchFollowers();
+    fetchPostCount();
   }, []);
  
   const handleImageChange = (e) => {
@@ -429,7 +448,8 @@ function Sidebar() {
         <h2 className="text-center mt-5 text-lg font-semibold">{username}</h2>
         <div className="flex justify-between space-x-4 mt-4">
           <p className="text-sm text-gray-600">{followers} Followers</p> {/* Display followers count */}
-          <p className="text-sm text-gray-600">2 Posts</p>
+          {/* Display followers count */}
+          <p className="text-sm text-gray-600">{posts} Posts</p>
         </div>
       </div>
     </div>
