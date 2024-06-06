@@ -129,12 +129,12 @@ const Header = () => {
 
         <div className="flex gap-4 items-center">
           {/* Color Picker Icon */}
-          <button
+          {/* <button
             className="p-2.5 text-white rounded-md bg-zinc-600 hover:bg-zinc-700"
             onClick={() => setDisplayColorPicker(!displayColorPicker)}
           >
             🎨
-          </button>
+          </button> */}
           {displayColorPicker && (
             <div className="absolute top-16 right-4 z-50">
               <SketchPicker color={color} onChange={handleColorChange} />
