@@ -705,9 +705,9 @@ function Sidebar() {
 
         <h2 className="text-center mt-5 text-lg font-semibold">{username}</h2>
         <div className="flex justify-between space-x-4 mt-4">
-          <p className="text-sm text-gray-600">{followers} Followers</p> {/* Display followers count */}
+          <p className="text-sm text-red-600">{followers} Followers</p> {/* Display followers count */}
           {/* Display followers count */}
-          <p className="text-sm text-gray-600">{posts} Posts</p>
+          <p className="text-sm text-green-600">{posts} Posts</p>
         </div>
       </div>
     </div>
