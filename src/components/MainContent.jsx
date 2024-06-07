@@ -296,7 +296,7 @@ function MainContent() {
           className="rounded-full w-10 h-10"
         />
         <div className="ml-2">
-          <h3 className="text-sm font-semibold">{post.user.username}</h3>
+          <h3 className="text-sm font-semibold">{post.username}</h3>
           <p className="text-xs text-gray-600">{new Date(post.created_on).toLocaleTimeString()}</p>
         </div>
       </div>
