@@ -78,7 +78,7 @@ class PostSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "user",
-            "username"
+            "username",
             "content",
             "image",
             "profile_photo",
