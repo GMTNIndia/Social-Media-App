@@ -334,7 +334,6 @@ class NotificationListView(generics.ListAPIView):
         user = self.request.user
         return Notification.objects.filter(user=user)
 
-
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def notification_detail(request, notification_id):
@@ -352,7 +351,6 @@ def notification_detail(request, notification_id):
         notification.read = True
         notification.save()
         return Response({"detail": "Notification marked as read."}, status=status.HTTP_200_OK)
-
 
 class AllUsersAPIView(generics.ListAPIView):
     serializer_class = CustomUserSerializer
