@@ -226,7 +226,7 @@
 //   );
 // }
 
-// export default Sidebar;
+// // export default Sidebar;
 
 // import React, { useState, useEffect } from 'react';
 // import axios from 'axios';
@@ -621,7 +621,7 @@ function Sidebar() {
   };
 
   return ( 
-    <div className="fixed top-0 left-0 w-full md:w-1/4 p-4 h-full overflow-hidden mt-32">
+    <div className="hidden lg:block fixed top-0 left-0 w-full md:w-1/4 p-4 h-full overflow-hidden mt-32">
       <div className="bg-white shadow rounded p-4">
         <div className="flex justify-center">
           <div className="relative">

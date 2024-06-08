@@ -278,6 +278,7 @@
 // }
 
 // export default RightSidebar;
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import manish from '../components/profile.jpg';
@@ -330,8 +331,7 @@ function RightSidebar() {
   };
 
   return (
-    <div className="fixed top-0 right-0 w-full md:w-1/4 p-4 h-full overflow-hidden mt-32">
-      {/* <div className="bg-white shadow rounded p-4 mb-4"> */}
+    <div className="hidden lg:block fixed top-0 right-0 w-full lg:w-1/4 p-4 h-full overflow-hidden mt-32">
       <div className="bg-white shadow rounded p-4 mb-4 h-72 overflow-auto">
         <h3 className="font-semibold mb-2">People you may know</h3>
         <div className="space-y-4 mt-4">
@@ -354,9 +354,9 @@ function RightSidebar() {
           ))}
         </div>
       </div>
-
     </div>
   );
 }
 
 export default RightSidebar;
+
