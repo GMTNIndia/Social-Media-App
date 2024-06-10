@@ -445,7 +445,7 @@ const Container = styled.div`
     }
 
     .contact {
-      min-height: 5rem;
+      min-height: 3rem;
       cursor: pointer;
       width: 90%;
       border-radius: 0.2rem;
@@ -454,6 +454,7 @@ const Container = styled.div`
       align-items: center;
       justify-content: center; // Center the individual contact content
       transition: 0.5s ease-in-out;
+      margin-top: 10px;
 
       .username {
         h3 {
