@@ -431,10 +431,9 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; // Center the contacts vertically
+    justify-content: flex-start; // start the contacts vertically
     overflow: auto;
-    gap: 0.8rem;
-    padding-top:8rem;
+    // gap: 0.8rem;
     &::-webkit-scrollbar {
       width: 0.1rem;
 
