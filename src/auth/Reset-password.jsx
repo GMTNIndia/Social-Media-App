@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function ResetPassword() {
   const [formData, setFormData] = useState({
@@ -9,6 +11,7 @@ function ResetPassword() {
     confirm_password: ''
   });
   const [error, setError] = useState(null);
+  // const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
   // Load email and otp from localStorage on component mount
@@ -34,6 +37,8 @@ function ResetPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // setError(null); 
+    // setSuccess(null);
     if (formData.new_password !== formData.confirm_password) {
       setError('Passwords do not match');
       return;
@@ -53,8 +58,20 @@ function ResetPassword() {
         }),
       });
 
+
       if (response.ok) {
-        navigate('/login'); // Redirect to login page after successful password reset
+        toast.success('Password reset successful! Redirecting to login page...', {
+          position: "top-center",
+          autoClose: 2000,
+          onClose: () => {
+            navigate('/login'); 
+          }
+        });
+      // if (response.ok) {
+      //   setSuccess(true);
+      //   // setTimeout(() => {
+      //   //   navigate('/login'); // Redirect to login page after a delay
+      //   // }, 3000); // Adjust the delay as needed (3000 ms = 3 seconds)
       } else {
         const data = await response.json();
         setError(data.message || 'Password reset failed');
