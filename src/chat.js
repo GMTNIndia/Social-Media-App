@@ -150,7 +150,7 @@
 
 
 import React, { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation} from "react-router-dom";
 import styled from "styled-components";
 import ChatContainer from "./chat/Chatcontainer";
 import Contacts from "./chat/Contact";
@@ -159,6 +159,7 @@ import Welcome from "./chat/Welcome";
 
 export default function Chat() {
   const navigate = useNavigate();
+  const location = useLocation(); 
   const [contacts, setContacts] = useState([]);
   const [currentChat, setCurrentChat] = useState(undefined);
   const ws = useRef(null);
@@ -172,6 +173,17 @@ export default function Chat() {
       // initializeWebSocket(token);
     }
   }, [navigate]);
+
+  useEffect(() => {
+    if (location.state?.userId) {
+      // Set the current chat based on the userId passed from the notification
+      const userId = location.state.userId;
+      const userChat = contacts.find(contact => contact.id === userId);
+      if (userChat) {
+        handleChatChange(userChat);
+      }
+    }
+  }, [location.state, contacts]);
 
   const fetchContacts = async (token) => {
     try {
@@ -252,6 +264,10 @@ export default function Chat() {
 
   const handleChatChange = (chat) => {
     setCurrentChat(chat);
+    const userId = localStorage.getItem("userId");
+    if (userId && chat?.id) {
+      fetchAllMessages(userId, chat.id);
+    }
   };
 
   const handleNotificationClick = (chatId) => {
