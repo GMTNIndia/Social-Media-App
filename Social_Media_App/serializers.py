@@ -248,10 +248,11 @@ class ProfilePhotoUpdateSerializer(serializers.ModelSerializer):
 
 class NotificationSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
+    profile_photo = serializers.ImageField(source='user.profile_photo', read_only=True)
 
     class Meta:
         model = Notification
-        fields = ['id', 'user', 'username', 'notification_type',
+        fields = ['id', 'user', 'username', 'profile_photo', 'notification_type',
                   'message', 'read', 'created_on']
 
 
