@@ -158,14 +158,139 @@
 
 // export default Notifications;
 
+// import React, { useEffect, useState } from 'react';
+// import axios from 'axios';
+// import { useNavigate } from 'react-router-dom';
+// import manish from './components//profile.jpg';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+// import './animation.css'; // Ensure you have this CSS file for custom animations
+
+// const Notifications = () => {
+//   const [notifications, setNotifications] = useState([]);
+//   const navigate = useNavigate();
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     const fetchNotifications = async () => {
+//       try {
+//         const token = localStorage.getItem('accessToken');
+//         const response = await axios.get('http://127.0.0.1:8000/api/notifications/', {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//           },
+//         });
+//         const sortedNotifications = response.data.reverse(); // Reverse order to display new notifications first
+//         setNotifications(sortedNotifications);
+//       } catch (error) {
+//         console.error('Error fetching notifications:', error);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchNotifications();
+//   }, []);
+
+//   const markAsRead = async (id) => {
+//     try {
+//       const token = localStorage.getItem('accessToken');
+//       await axios.post(`http://127.0.0.1:8000/api/notifications/${id}/read/`, null, {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       });
+//       const updatedNotifications = notifications.map((notif) =>
+//         notif.id === id ? { ...notif, read: true } : notif
+//       );
+//       setNotifications(updatedNotifications);
+//     } catch (error) {
+//       console.error('Error marking notification as read:', error);
+//     }
+//   };
+
+//   const handleNotificationClick = (userId) => {
+//     navigate(`/chat/${userId}`);
+//   };
+
+//   return (
+//     < div className='bg-gray-800'>
+//      <h1 className="text-white text-center mb-4">All Notifications</h1>
+
+//     <div className="container mx-auto p-10 mt-28 ">
+  
+//       {loading ? (
+//         <p className="text-center">Loading notifications...</p>
+//       ) : (
+//         <ul className="space-y-4">
+//           {notifications.map((notification, index) => (
+//             <NotificationItem
+//               key={notification.id}
+//               notification={notification}
+//               markAsRead={markAsRead}
+//               index={index}
+//               onClick={() => handleNotificationClick(notification.user_id)} 
+//             />
+//           ))}
+//         </ul>
+//       )}
+//     </div>
+//     </div>
+//   );
+// };
+
+// const NotificationItem = ({ notification, markAsRead, index }) => {
+//   const getColor = () => {
+//     if (notification.type === 'like') {
+//       return 'border-yellow-500'; // Yellow border for like notifications
+//     } else if (notification.type === 'comment') {
+//       return 'border-purple-500'; // Purple border for comment notifications
+//     } else {
+//       return notification.read ? 'border-green-500' : 'border-blue-500'; // Default colors
+//     }
+//   };
+
+//   return (
+//     <li
+//       className={`p-4 border-l-4 w-80 text-center mx-auto flex items-center justify-between shadow-lg rounded bg-white ${getColor()} ${index % 2 === 0 ? 'animate-slide-in-left' : 'animate-slide-in-right'}`}
+//       onClick={onClick}
+//     >     
+//      <img
+//      src={notification.profile_photo ? `http://127.0.0.1:8000${notification.profile_photo}` : manish}
+//             // src={notification.image} // Assuming you have an image URL in your notification data
+//             alt="Notification Image"
+//             className="w-8 h-8 object-cover rounded-full mr-4"
+//           />
+//       <div className="text-left">
+//         <p className="font-bold text-lg">{notification.title}</p>
+//         <p className="text-base">{notification.message}</p>
+//       </div>
+//       {!notification.read && (
+//         <FontAwesomeIcon
+//           icon={faCheckCircle}
+//           className="text-blue-500 cursor-pointer ml-4"
+//           onClick={() => markAsRead(notification.id)}
+//         />
+//       )}
+//     </li>
+//   );
+// };
+
+// export default Notifications
+
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import manish from './components//profile.jpg';
+import manish from './components/profile.jpg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import './animation.css'; // Ensure you have this CSS file for custom animations
+import initializeWebSocket from './chat';
+
+
 
 const Notifications = () => {
+  const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -207,32 +332,40 @@ const Notifications = () => {
     }
   };
 
+  const handleNotificationClick = (userId) => {
+    console.log("User ID:", userId);
+    if (userId) {
+      navigate(`http://127.0.0.1:8000/chat/${userId}`);
+      initializeWebSocket();
+    } else {
+      console.error('User ID is undefined');
+    }
+  };
   return (
-    < div className='bg-gray-800'>
-     <h1 className="text-white text-center mb-4">All Notifications</h1>
-
-    <div className="container mx-auto p-10 mt-28 ">
-  
-      {loading ? (
-        <p className="text-center">Loading notifications...</p>
-      ) : (
-        <ul className="space-y-4">
-          {notifications.map((notification, index) => (
-            <NotificationItem
-              key={notification.id}
-              notification={notification}
-              markAsRead={markAsRead}
-              index={index}
-            />
-          ))}
-        </ul>
-      )}
-    </div>
+    <div className="bg-gray-800">
+      <h1 className="text-white text-center mb-4">All Notifications</h1>
+      <div className="container mx-auto p-10 mt-28">
+        {loading ? (
+          <p className="text-center">Loading notifications...</p>
+        ) : (
+          <ul className="space-y-4">
+            {notifications.map((notification, index) => (
+              <NotificationItem
+                key={notification.id}
+                notification={notification}
+                markAsRead={markAsRead}
+                index={index}
+                handleNotificationClick={handleNotificationClick}
+              />
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 };
 
-const NotificationItem = ({ notification, markAsRead, index }) => {
+const NotificationItem = ({ notification, markAsRead, index, handleNotificationClick }) => {
   const getColor = () => {
     if (notification.type === 'like') {
       return 'border-yellow-500'; // Yellow border for like notifications
@@ -246,13 +379,13 @@ const NotificationItem = ({ notification, markAsRead, index }) => {
   return (
     <li
       className={`p-4 border-l-4 w-80 text-center mx-auto flex items-center justify-between shadow-lg rounded bg-white ${getColor()} ${index % 2 === 0 ? 'animate-slide-in-left' : 'animate-slide-in-right'}`}
-    >     
-     <img
-     src={notification.profile_photo ? `http://127.0.0.1:8000${notification.profile_photo}` : manish}
-            // src={notification.image} // Assuming you have an image URL in your notification data
-            alt="Notification Image"
-            className="w-8 h-8 object-cover rounded-full mr-4"
-          />
+      onClick={() => handleNotificationClick(notification.user_id)}
+    >
+      <img
+        src={notification.profile_photo ? `http://127.0.0.1:8000${notification.profile_photo}` : manish}
+        alt="Notification Image"
+        className="w-8 h-8 object-cover rounded-full mr-4"
+      />
       <div className="text-left">
         <p className="font-bold text-lg">{notification.title}</p>
         <p className="text-base">{notification.message}</p>
@@ -261,12 +394,14 @@ const NotificationItem = ({ notification, markAsRead, index }) => {
         <FontAwesomeIcon
           icon={faCheckCircle}
           className="text-blue-500 cursor-pointer ml-4"
-          onClick={() => markAsRead(notification.id)}
+          onClick={(e) => {
+            e.stopPropagation();
+            markAsRead(notification.id);
+          }}
         />
       )}
     </li>
   );
 };
 
-export default Notifications
-
+export default Notifications;
