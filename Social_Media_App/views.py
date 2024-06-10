@@ -423,3 +423,9 @@ class ProfilePhotoDeleteView(APIView):
         user.profile_photo = None
         user.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class UserFollowersCountAPIView(APIView):
+    def get(self, request, pk):
+        user = get_object_or_404(CustomUser, pk=pk)
+        followers_count = user.followers.count()
+        return Response({'followers_count': followers_count}, status=status.HTTP_200_OK)
