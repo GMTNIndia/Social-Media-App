@@ -56,6 +56,7 @@ function MyComponent({ searchResults }) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [postCount, setPostCount] = useState(0);
   const [followerCount, setFollowerCount] = useState(0);
+  const [profileImage, setProfileImage] = useState(null); // State to store profile image URL
   const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
@@ -77,7 +78,25 @@ function MyComponent({ searchResults }) {
     .catch(error => {
       console.error('There was an error fetching the users!', error);
     });
+
+    // Fetch profile image
+    fetchProfileImage();
   }, [token]);
+
+  const fetchProfileImage = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:8000/api/profile/photo/retrieve/', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
+      if (response.data.profile_photo) {
+        setProfileImage(response.data.profile_photo);
+      }
+    } catch (error) {
+      console.error('Error fetching profile image:', error.message);
+    }
+  };
 
   const handleFollowToggle = (userId) => {
     const isFollowed = followStates[userId];
@@ -119,14 +138,15 @@ function MyComponent({ searchResults }) {
       console.error('There was an error fetching the post count!', error);
     });
   
-    axios.get(`http://127.0.0.1:8000/api/users/${userId}/followers/`, {
+    // Fetch follower count for the selected user
+    axios.get(`http://127.0.0.1:8000/users/${userId}/followers_count/`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
     })
     .then(response => {
-      console.log('Follower count:', response.data.follower_count);
-      setFollowerCount(response.data.follower_count);
+      console.log('Follower count:', response.data.followers_count);
+      setFollowerCount(response.data.followers_count);
     })
     .catch(error => {
       console.error('There was an error fetching the follower count!', error);
@@ -138,6 +158,7 @@ function MyComponent({ searchResults }) {
     setSelectedUser(user); // Update selectedUser with the fetched user data
     setModalIsOpen(true);
   };
+  
 
   const closeModal = () => {
     setModalIsOpen(false);
@@ -161,6 +182,8 @@ function MyComponent({ searchResults }) {
     overlay: {
       backgroundColor: 'rgba(0, 0, 0, 0.75)', // Dark overlay
     },
+ 
+
   };
 
   return (
