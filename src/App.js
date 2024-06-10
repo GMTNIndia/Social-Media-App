@@ -39,7 +39,8 @@ import Register from './auth/Register';
 import Nopage from './auth/Nopage';
 import Navbar from './Navbar';
 import SearchBar from './components/SearchBar';
-import ChatWindow from './components/ChatWindow';
+// import ChatWindow from './components/ChatWindow';
+import Chat from './chat'
 import Notifications from './Notification';
 import PrivateRoute from './PrivateRoute'; // Import PrivateRoute
 import { ToastContainer } from 'react-toastify';
@@ -60,7 +61,7 @@ function App() {
           <Route path="*" element={<Nopage />} />
           <Route path="/" element={<PrivateRoute element={<Home />} />} />
           <Route path="/search" element={<PrivateRoute element={<SearchBar />} />} />
-          <Route path="/chat" element={<PrivateRoute element={<ChatWindow />} />} />
+          <Route path="/chat" element={<PrivateRoute element={<Chat />} />} />
           <Route path="/notification" element={<PrivateRoute element={<Notifications />} />} />
           <Route path="/password-reset-confirm" element={<ResetPassword/>} />
           <Route path="/forgot-password" element={<ForgotPassword/>} />
