@@ -110,7 +110,11 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
+  color: black;
+  ${'' /* font-size:10px;
+   */}
+   font-weight: bold;
+   border-left:2px solid #873ADF;;
   flex-direction: column;
   img {
     height: 20rem;

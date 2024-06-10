@@ -91,7 +91,7 @@ export default function ChatContainer({ currentChat }) {
 
   return (
     <Container>
-      <div className="chat-header">
+      <div className="chat-header ">
         <div className="user-details">
           <div className="avatar"></div>
           <div className="username">
@@ -138,6 +138,7 @@ const Container = styled.div`
   display: grid;
   grid-template-rows: 10% 80% 10%;
   gap: 0.1rem;
+  border-left:2px solid #873ADF;;
   overflow: hidden;
   @media screen and (min-width: 720px) and (max-width: 1080px) {
     grid-template-rows: 15% 70% 15%;
@@ -146,6 +147,7 @@ const Container = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background:#873ADF;
     padding: 0 2rem;
     .user-details {
       display: flex;
@@ -158,23 +160,26 @@ const Container = styled.div`
       }
       .username {
         h3 {
-          color: white;
-          padding:10px;
+          color:white;
+          font-weight:bold;
+          padding:10px; 
+          ${'' /* background-color:balck; */}
         }
       }
     }
   }
  .chat-messages {
-    padding: 1rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
+    border:2px;
     color: black;
     gap: 1rem;
     overflow: scroll;
     &::-webkit-scrollbar {
       width: 0.2rem;
       &-thumb {
-        background-color: #ffffff39;
+        background-color: #25D366;
         width: 0.1rem;
         border-radius: 1rem;
       }
@@ -199,7 +204,7 @@ const Container = styled.div`
       display: flex;
       justify-content: flex-end;
       .content {
-        background-color: blue;
+        background-color: #873ADF;
         padding: 0.5rem 1rem;
       border-radius: 10px;
       border: none;
@@ -211,7 +216,7 @@ const Container = styled.div`
       justify-content: flex-start;
 
         .content {
-        background-color: red;
+        background-color: #5F6061;
         padding: 0.5rem 1rem;
       border-radius: 10px;
       border: none;
@@ -229,10 +234,14 @@ const Container = styled.div`
     input {
       width: 90%;
       height: 60%;
-      background-color: transparent;
-      color: white;
+      ${'' /* background-color: transparent; */}
+      background-color:#E5E6E8;;
+      color: black;
       border: none;
       padding-left: 1rem;
+      margin-left:10px;
+      ${'' /* padding:1rem; */}
+      padding: 1.6rem 1rem;
       font-size: 1.2rem;
      
       &:focus {
@@ -240,14 +249,17 @@ const Container = styled.div`
       }
     }
     button {
-      padding: 0.3rem 2rem;
-      border-radius: 2rem;
+      padding: 0.9rem 1.2rem;
+      ${'' /* padding: 1.6rem 1rem; */}
+      ${'' /* border-radius: 2rem; */}
       display: flex;
       border :none;
+      ${'' /* padding:15px; */}
+      margin-right:10px;
       outlineline:none
       justify-content: center;
       align-items: center;
-      background-color: #9a86f3;
+      background-color:#873ADF;;
       border: none;
       svg {
         font-size: 2rem;

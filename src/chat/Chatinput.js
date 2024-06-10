@@ -56,7 +56,7 @@ export default function ChatInput({ userId,currentChat }) {
   };
 
   return (
-    <Container>
+    <Container className="bg-black">
       <form className="input-container" onSubmit={(event) => sendChat(event)}>
         <input
           type="text"
@@ -84,11 +84,12 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     gap: 2rem;
-    background-color: #ffffff34;
+    background-color: black;
     input {
       width: 90%;
       height: 60%;
-      background-color: transparent;
+      ${'' /* background-color: transparent; */}
+      background-color: black;
       color: black;
       border: none;
       padding-left: 1rem;
