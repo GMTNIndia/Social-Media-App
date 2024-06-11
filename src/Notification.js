@@ -382,7 +382,7 @@ const NotificationItem = ({ notification, markAsRead, index, handleNotificationC
       onClick={() => handleNotificationClick(notification.user_id)}
     >
       <img
-        src={notification.profile_photo ? `http://127.0.0.1:8000${notification.profile_photo}` : manish}
+        src={notification.profile_photo ? `${notification.profile_photo}` : manish}
         alt="Notification Image"
         className="w-8 h-8 object-cover rounded-full mr-4"
       />
