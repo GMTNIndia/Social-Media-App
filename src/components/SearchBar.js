@@ -186,27 +186,25 @@ function SearchBar() {
   }, [searchTerm, allUsers]);
 
   return (
-    <section className="bg-gray-100">
+    <section className="bg-gray-100 min-h-screen p-4 md:p-8 lg:p-12 mt-20">
       <form
-        className="flex flex-col justify-center px-4 py-5 ml-[120px] mt-[120px] bg-white rounded-lg border border-solid shadow-sm border-zinc-200 max-w-[730px]"
+        className="flex flex-col items-center bg-white rounded-lg shadow-sm border border-solid border-zinc-200 p-6 max-w-full md:max-w-3xl lg:max-w-4xl mx-auto"
         onSubmit={(e) => e.preventDefault()}
       >
-        <section className="flex gap-4 px-[754] py-[48] max-md:flex-wrap max-md:max-w-full">
-          <label htmlFor="searchInput" className="sr-only">
-            What are you looking for?
-          </label>
-          <input
-            className="justify-center items-start py-[48] pr-52 pl-3.5 h-12 text-xs rounded-md bg-zinc-200 text-zinc-500 w-[620px] max-md:pr-5 max-md:max-w-full"
-            type="text"
-            id="searchInput"
-            value={searchTerm}
-            onChange={handleInputChange}
-            placeholder="Find your friends here ?"
-            aria-label="What are you looking for?"
-          />
-        </section>
+        <label htmlFor="searchInput" className="sr-only">
+          What are you looking for?
+        </label>
+        <input
+          className="w-full md:w-3/4 lg:w-2/3 h-12 px-4 py-2 rounded-md bg-zinc-200 text-zinc-500 text-sm"
+          type="text"
+          id="searchInput"
+          value={searchTerm}
+          onChange={handleInputChange}
+          placeholder="Find your friends here ?"
+          aria-label="What are you looking for?"
+        />
       </form>
-      {error && <p className="text-red-500">{error}</p>}
+      {error && <p className="text-red-500 text-center mt-4">{error}</p>}
       
       {/* Display users */}
       {filteredUsers.length > 0 ? (

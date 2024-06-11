@@ -13,7 +13,7 @@ function CardProfile({ profile_photo, username, onClick }) {
     >
       <img
         loading="lazy"
-        src={profile_photo ? `http://127.0.0.1:8000${profile_photo}` : defaultImage}
+        src={profile_photo ? `${profile_photo}` : defaultImage}
         alt={`Profile of ${username}`}
         className="rounded-full aspect-square w-[98px]"
       />
@@ -28,7 +28,7 @@ function FriendSuggestion({ profile_photo, username, userId, isFollowed, onFollo
       <div className="flex gap-2.5 font-medium text-neutral-900">
         <img
           loading="lazy"
-          src={profile_photo ? `http://127.0.0.1:8000${profile_photo}` : defaultImage}
+          src={profile_photo ? `${profile_photo}` : defaultImage}
           alt={`Profile of ${username}`}
           className="shrink-0 w-8 rounded-full aspect-square"
         />
@@ -268,7 +268,7 @@ function MyComponent({ searchResults }) {
       </button>
       {/* User details */}
       <img
-  src={selectedUser.profile_photo ? `http://127.0.0.1:8000${selectedUser.profile_photo}` : defaultImage}
+  src={selectedUser.profile_photo ? `${selectedUser.profile_photo}` : defaultImage}
   alt={`Profile of ${selectedUser.username}`}
   className="rounded-full w-24 h-24 mb-4"
 />
