@@ -57,7 +57,7 @@ urlpatterns = [
     path('password-reset-confirm/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path("api/profile/photo/delete/", ProfilePhotoDeleteView.as_view(), name="profile_photo_delete"),
     path('users/<int:pk>/followers_count/', UserFollowersCountAPIView.as_view(), name='user-followers-count'),
-    path('chat/<int:user_id>/messages/', chat_between_users, name='chat-between-users'),
+    path('chat/<int:user_id>/', chat_between_users, name='chat-between-users'),
     path("api/", include(router.urls)),
 ]
 
