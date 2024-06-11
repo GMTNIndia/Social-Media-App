@@ -429,3 +429,20 @@ class UserFollowersCountAPIView(APIView):
         user = get_object_or_404(CustomUser, pk=pk)
         followers_count = user.followers.count()
         return Response({'followers_count': followers_count}, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def chat_between_users(request, user_id):
+    """
+    Retrieve chat messages between the authenticated user and another user.
+    """
+    user = request.user
+    try:
+        messages = Message.objects.filter(
+            (Q(sender=user) & Q(receiver__id=user_id)) |
+            (Q(sender__id=user_id) & Q(receiver=user))
+        ).order_by('timestamp')
+        serializer = MessageSerializer(messages, many=True, context={'request': request})
+        return Response(serializer.data)
+    except Exception as e:
+        return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
