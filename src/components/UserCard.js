@@ -321,7 +321,11 @@ function CardProfile({ profile_photo, username, onClick }) {
     >
       <img
         loading="lazy"
+<<<<<<< HEAD
         src={profile_photo ? formatImageUrl(profile_photo) : defaultImage}
+=======
+        src={profile_photo ? `${profile_photo}` : defaultImage}
+>>>>>>> 7830bce92ded3a45c4133d8da8a107f01368b329
         alt={`Profile of ${username}`}
         className="rounded-full aspect-square w-[98px]"
       />
@@ -336,7 +340,11 @@ function FriendSuggestion({ profile_photo, username, userId, isFollowed, onFollo
       <div className="flex gap-2.5 font-medium text-neutral-900">
         <img
           loading="lazy"
+<<<<<<< HEAD
           src={profile_photo ? formatImageUrl(profile_photo) : defaultImage}
+=======
+          src={profile_photo ? `${profile_photo}` : defaultImage}
+>>>>>>> 7830bce92ded3a45c4133d8da8a107f01368b329
           alt={`Profile of ${username}`}
           className="shrink-0 w-8 rounded-full aspect-square"
         />
@@ -542,6 +550,7 @@ function MyComponent({ searchResults }) {
         contentLabel="User Profile Photo Modal"
         style={customStyles}
       >
+<<<<<<< HEAD
         {/* Check if selectedUser exists and render its details */}
         {selectedUser && (
           <div className="relative flex flex-col items-center p-4 bg-white rounded-lg">
@@ -571,6 +580,45 @@ function MyComponent({ searchResults }) {
               alt={`Profile of ${selectedUser.username}`}
               className="rounded-full w-24 h-24 mb-4"
             />
+=======
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+      {/* User details */}
+      <img
+  src={selectedUser.profile_photo ? `${selectedUser.profile_photo}` : defaultImage}
+  alt={`Profile of ${selectedUser.username}`}
+  className="rounded-full w-24 h-24 mb-4"
+/>
+
+      <h2 className="text-xl font-semibold">{selectedUser.username}</h2>
+      <p className="mt-2">Posts: {postCount}</p>
+      <p className="mt-2">Followers: {followerCount}</p>
+      {/* Follow/unfollow button */}
+      <button
+        className={`mt-4 p-2 font-semibold ${followStates[selectedUser.id] ? 'bg-red-600 text-white' : 'bg-purple-700 text-gray-100'}`}
+        onClick={() => handleFollowToggle(selectedUser.id)}
+      >
+        {followStates[selectedUser.id] ? 'Unfollow' : 'Follow'}
+      </button>
+    </div>
+  )}
+</Modal>
+
+
+>>>>>>> 7830bce92ded3a45c4133d8da8a107f01368b329
 
             <h2 className="text-xl font-semibold">{selectedUser.username}</h2>
             <p className="mt-2">Posts: {postCount}</p>
