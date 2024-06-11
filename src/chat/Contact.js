@@ -332,6 +332,334 @@
 
 
 
+// import React, { useState, useEffect } from "react";
+// import styled from "styled-components";
+// // import Logo from "../assets/logo.svg";
+
+// export default function Contacts({ contacts, changeChat }) {
+//   const [currentUserName, setCurrentUserName] = useState("");
+//   const [currentUserImage, setCurrentUserImage] = useState("");
+//   const [currentSelected, setCurrentSelected] = useState(undefined);
+
+//   const [userName, setUserName] = useState(""); // Default username
+
+//   useEffect(() => {
+//     // Retrieve username from localStorage
+//     const storedUserName = localStorage.getItem("username");
+//     if (storedUserName) {
+//       setUserName(storedUserName);
+//     }
+//   }, []);
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       // Simulating data fetching
+//       const data = {
+//         username: "John Doe",
+//         avatarImage: "base64encodedImageData",
+//       };
+//       setCurrentUserName(data.username);
+//       setCurrentUserImage(data.avatarImage);
+//     };
+
+//     fetchData();
+//   }, []);
+
+//   const changeCurrentChat = (index, contact) => {
+//     setCurrentSelected(index);
+//     changeChat(contact);
+//   };
+
+//   return (
+//     <>
+//       {currentUserImage && (
+//         <Container>
+//           <div className="brand">
+//             <h3>All User</h3>
+//           </div>
+//           <div className="contacts">
+//             {contacts.map((contact, index) => (
+//               <div
+//                 key={contact._id}
+//                 className={`contact ${
+//                   index === currentSelected ? "selected" : ""
+//                 }`}
+//                 onClick={() => changeCurrentChat(index, contact)}
+//               >
+//                 <div className="username">
+//                   <h3>{contact.username}</h3>
+//                 </div>
+//               </div>
+//             ))}
+//           </div>
+//           <div className="current-user">
+//             <div className="username">
+//               <h2>{userName}</h2>
+//             </div>
+//           </div>
+//         </Container>
+//       )}
+//       {/* You can add a loading state or component here */}
+//     </>
+//   );
+// }
+
+
+// const Container = styled.div`
+//   display: grid;
+//   grid-template-rows: 10% 75% 15%;
+//   overflow: hidden;
+//   border-left:2px solid #873ADF;
+//   background-color: white;
+//   .brand {
+//     display: flex;
+//     align-items: center;
+//     gap: 1rem;
+//     justify-content: center;
+//     img {
+//       height: 2rem;
+//     }
+//     h3 {
+//       color: black;
+//       text-transform: uppercase;
+//     }
+//   }
+//   .contacts {
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     overflow: auto;
+//     gap: 0.8rem;
+//     &::-webkit-scrollbar {
+//       width: 0.2rem;
+//       &-thumb {
+//         background-color: #ffffff39;
+//         width: 0.1rem;
+//         border-radius: 1rem;
+//       }
+//     }
+//     .contact {
+//       background-color: grey;
+//       min-height: 5rem;
+//       cursor: pointer;
+//       width: 90%;
+//       border-radius: 0.2rem;
+//       padding: 0.4rem;
+//       display: flex;
+//       gap: 1rem;
+//       align-items: center;
+//       transition: 0.5s ease-in-out;
+//       .avatar {
+//         img {
+//           height: 3rem;
+//         }
+//       }
+//       .username {
+//         h3 {
+//           color: white;
+//         }
+//       }
+//     }
+//     .selected {
+//       background-color: #9a86f3;
+//     }
+//   }
+
+//   .current-user {
+//     background-color: #0d0d30;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     gap: 2rem;
+//     .avatar {
+//       img {
+//         height: 4rem;
+//         max-inline-size: 100%;
+//       }
+//     }
+//     .username {
+//       h2 {
+//         color: white;
+//       }
+//     }
+//     @media screen and (min-width: 720px) and (max-width: 1080px) {
+//       gap: 0.5rem;
+//       .username {
+//         h2 {
+//           font-size: 1rem;
+//         }
+//       }
+//     }
+//   }
+// `;
+
+
+
+
+
+// import React, { useState, useEffect } from "react";
+// import styled from "styled-components";
+// // import Logo from "../assets/logo.svg";
+
+// export default function Contacts({ contacts, changeChat }) {
+//   const [currentUserName, setCurrentUserName] = useState("");
+//   const [currentUserImage, setCurrentUserImage] = useState("");
+//   const [currentSelected, setCurrentSelected] = useState(undefined);
+
+//   const [userName, setUserName] = useState(""); // Default username
+
+//   useEffect(() => {
+//     // Retrieve username from localStorage
+//     const storedUserName = localStorage.getItem("username");
+//     if (storedUserName) {
+//       setUserName(storedUserName);
+//     }
+//   }, []);
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       // Simulating data fetching
+//       const data = {
+//         username: "John Doe",
+//         avatarImage: "base64encodedImageData",
+//       };
+//       setCurrentUserName(data.username);
+//       setCurrentUserImage(data.avatarImage);
+//     };
+
+//     fetchData();
+//   }, []);
+
+//   const changeCurrentChat = (index, contact) => {
+//     setCurrentSelected(index);
+//     changeChat(contact);
+//   };
+
+//   return (
+//     <>
+//       {currentUserImage && (
+//         <Container>
+//           <div className="brand">
+//             <h3>All User</h3>
+//           </div>
+//           <div className="contacts">
+//             {contacts.map((contact, index) => (
+//               <div
+//                 key={contact._id}
+//                 className={`contact ${
+//                   index === currentSelected ? "selected" : ""
+//                 }`}
+//                 onClick={() => changeCurrentChat(index, contact)}
+//               >
+//                 <div className="username">
+//                   <h3>{contact.username}</h3>
+//                 </div>
+//               </div>
+//             ))}
+//           </div>
+//           <div className="current-user">
+//             <div className="username">
+//               <h2>{userName}</h2>
+//             </div>
+//           </div>
+//         </Container>
+//       )}
+//       {/* You can add a loading state or component here */}
+//     </>
+//   );
+// }
+
+// const Container = styled.div`
+//   display: grid;
+//   grid-template-rows: 10% 75% 15%;
+//   overflow: hidden;
+//   border-left: 2px solid #873ADF;
+//   background-color: white;
+
+//   .brand {
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     padding-top: 30px;
+//     h3 {
+//       color: black;
+//       text-transform: uppercase;
+//     }
+//   }
+
+//   .contacts {
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     overflow: auto;
+//     gap: 0.8rem;
+//     &::-webkit-scrollbar {
+//       width: 0.2rem;
+//       &-thumb {
+//         background-color: #ffffff39;
+//         width: 0.1rem;
+//         border-radius: 1rem;
+//       }
+//     }
+//     .contact {
+//       background-color: grey;
+//       min-height: 5rem;
+//       cursor: pointer;
+//       width: 90%;
+//       border-radius: 0.2rem;
+//       padding: 0.4rem;
+//       display: flex;
+//       gap: 1rem;
+//       align-items: center;
+//       transition: 0.5s ease-in-out;
+//       .avatar {
+//         img {
+//           height: 3rem;
+//         }
+//       }
+//       .username {
+//         h3 {
+//           color: white;
+//         }
+//       }
+//     }
+//     .selected {
+//       background-color: #9a86f3;
+//     }
+//   }
+
+//   .current-user {
+//     background-color: #0d0d30;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     gap: 2rem;
+//     .avatar {
+//       img {
+//         height: 4rem;
+//         max-inline-size: 100%;
+//       }
+//     }
+//     .username {
+//       h2 {
+//         color: white;
+//       }
+//     }
+//     @media screen and (min-width: 720px) and (max-width: 1080px) {
+//       gap: 0.5rem;
+//       .username {
+//         h2 {
+//           font-size: 1rem;
+//         }
+//       }
+//     }
+//   }
+// `;
+
+
+
+
+
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 // import Logo from "../assets/logo.svg";
@@ -377,7 +705,7 @@ export default function Contacts({ contacts, changeChat }) {
           <div className="brand">
             <h3>All User</h3>
           </div>
-          <div className="contacts mt">
+          <div className="contacts">
             {contacts.map((contact, index) => (
               <div
                 key={contact._id}
@@ -408,22 +736,26 @@ const Container = styled.div`
   display: grid;
   grid-template-rows: 10% 75% 15%;
   overflow: hidden;
-  border-right: 2px solid #873ADF;
   border-left: 2px solid #873ADF;
   background-color: white;
-
+ 
   .brand {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: black;
-    font-weight: bold;
-    background-color:#873ADF;
-
-    h3 {
+    height:60px;
+    ${'' /* padding-top: 30px; */}
+    ${'' /* align-items: center; */}
+    background-color: #873ADF
+    
+  
+    
+    
+    ;
+    h3
       color: black;
       text-transform: uppercase;
-      ${'' /* background-color:#724D9E */}
+      text-align: center;
     }
   }
 
@@ -431,41 +763,46 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; // start the contacts vertically
+    margin-top:20px;
+    ${'' /* margin-top:10px */}
     overflow: auto;
-    // gap: 0.8rem;
+    gap: 0.8rem;
     &::-webkit-scrollbar {
-      width: 0.1rem;
-
+      width: 0.2rem;
       &-thumb {
-        background-color: green;
-        width: 0.2rem;
+        background-color: #ffffff39;
+        width: 0.1rem;
         border-radius: 1rem;
       }
     }
-
     .contact {
-      min-height: 3rem;
+      margin-top:20px;
+      background-color: grey;
+      min-height: 5rem;
       cursor: pointer;
       width: 90%;
       border-radius: 0.2rem;
-      padding: 0.4rem;
+      padding: 1rem;
       display: flex;
+      m
+      gap: 1rem;
       align-items: center;
-      justify-content: center; // Center the individual contact content
       transition: 0.5s ease-in-out;
-      margin-top: 10px;
-
+      .avatar {
+        img {
+          height: 3rem;
+        }
+      }
       .username {
         h3 {
-          color: black;
-          font-weight: bold;
+          color: white;
+          text-align: center;
+          align-items: center;
         }
       }
     }
-
     .selected {
-      background-color: #724D9E;
+      background-color: #9a86f3;
     }
   }
 
@@ -475,16 +812,20 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     gap: 2rem;
-
+    .avatar {
+      img {
+        height: 4rem;
+        max-inline-size: 100%;
+      }
+    }
     .username {
       h2 {
         color: white;
+        text-align: center;
       }
     }
-
     @media screen and (min-width: 720px) and (max-width: 1080px) {
       gap: 0.5rem;
-
       .username {
         h2 {
           font-size: 1rem;

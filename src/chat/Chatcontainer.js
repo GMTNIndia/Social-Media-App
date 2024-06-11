@@ -91,7 +91,7 @@ export default function ChatContainer({ currentChat }) {
 
   return (
     <Container>
-      <div className="chat-header ">
+      <div className="chat-header bg-blue">
         <div className="user-details">
           <div className="avatar"></div>
           <div className="username">
@@ -135,51 +135,67 @@ export default function ChatContainer({ currentChat }) {
 
 
 const Container = styled.div`
-  display: grid;
+   display: grid;
   grid-template-rows: 10% 80% 10%;
   gap: 0.1rem;
-  border-left:2px solid #873ADF;;
+  ${'' /* padding:px */}
   overflow: hidden;
+  border:2px solid #873ADF;
   @media screen and (min-width: 720px) and (max-width: 1080px) {
     grid-template-rows: 15% 70% 15%;
   }
+
+
+  .brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    ${'' /* padding-top: 30px; */}
+    ${'' /* align-items: center; */}
+    background-color: #873ADF;
+    h3 {
+      color: black;
+      text-transform: uppercase;
+      text-align: center;
+    }
+  }
+
+
   .chat-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background:#873ADF;
-    padding: 0 2rem;
+    ${'' /* width:20px */}
+    height:60px;
+    margin-bottom:30px;
+    ${'' /* padding: 0 2rem; */}
+
+    ${'' /* background-color:blue: */}
+    background-color: #873ADF;
     .user-details {
       display: flex;
       align-items: center;
       gap: 1rem;
-      .avatar {
-        img {
-          height: 3rem;
-        }
-      }
+      
       .username {
         h3 {
-          color:white;
-          font-weight:bold;
-          padding:10px; 
-          ${'' /* background-color:balck; */}
+          color: black;
         }
       }
     }
   }
- .chat-messages {
-    padding: 2rem;
+  .chat-messages {
+    padding: 10px;
     display: flex;
     flex-direction: column;
-    border:2px;
-    color: black;
+    margin-top:10px;
     gap: 1rem;
-    overflow: scroll;
+    overflow: auto;
     &::-webkit-scrollbar {
       width: 0.2rem;
       &-thumb {
-        background-color: #25D366;
+        background-color: #ffffff39;
         width: 0.1rem;
         border-radius: 1rem;
       }
@@ -187,11 +203,11 @@ const Container = styled.div`
     .message {
       display: flex;
       align-items: center;
+      
       .content {
         max-width: 40%;
         overflow-wrap: break-word;
         padding: 1rem;
-        overflow: auto;
         font-size: 1.1rem;
         border-radius: 1rem;
         color: #d1d1d1;
@@ -228,7 +244,11 @@ const Container = styled.div`
     width: 100%;
     border-radius: 2rem;
     display: flex;
+    margin-bottom:30px;
+    margin-top:10px;
     align-items: center;
+    ${'' /* padding-bottom:1 rem */}
+    
     gap: 2rem;
     color:white;
     input {
@@ -267,3 +287,5 @@ const Container = styled.div`
       }
     }
 `;
+
+
