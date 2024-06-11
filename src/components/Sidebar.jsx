@@ -1,341 +1,113 @@
 
 
-// import React, { useEffect, useState } from 'react';
-// import axios from 'axios';
-// import manish from '../components/manish.jpg';
-
-// function RightSidebar() {
-//   const [users, setUsers] = useState([]);
-//   const token = localStorage.getItem('accessToken');
-//   const [image, setImage] = useState(null);
-//   const [profileImage, setProfileImage] = useState(manish); 
-//   useEffect(() => {
-//     // Fetch users from the API
-//     axios.get('http://127.0.0.1:8000/all-users/', {
-//       headers: {
-//         'Authorization': `Bearer ${token}`
-//       }
-//     })
-//     .then(response => {
-//       setUsers(response.data);
-//     })
-//     .catch(error => {
-//       console.error('There was an error fetching the users!', error);
-//     });
-//   }, [token]);
-
-
-//   // useEffect(() => {
-
-//   //   const fetchProfileImage = async () => {
-//   //     try {
-//   //       const response = await axios.get('http://127.0.0.1:8000/api/profile/photo/retrieve/', {
-//   //         headers: {
-//   //           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-//   //         },
-//   //       });
-//   //       if (response.data.profile_photo) {
-//   //         setProfileImage(response.data.profile_photo);
-//   //       }
-//   //     } catch (error) {
-//   //       console.error('Error fetching profile image:', error.message);
-//   //     }
-//   //   };
-  
-//   //   fetchProfileImage();
-//   // }, []);
-//   const handleFollow = (userId) => {
-//     axios.post(`http://127.0.0.1:8000/api/users/${userId}/follow/`, {}, {
-//       headers: {
-//         'Authorization': `Bearer ${token}`
-//       }
-//     })
-//     .then(response => {
-//       console.log('Followed successfully:', response.data);
-//       // Optionally, update the UI to reflect the follow status
-//     })
-//     .catch(error => {
-//       console.error('There was an error following the user!', error);
-//     });
-//   };
-
-//   return (
-//     <div className="fixed top-0 right-0 w-full md:w-1/4 p-4 h-full overflow-hidden mt-28">
-//       <div className="bg-white shadow rounded p-4 mb-4">
-//         <h3 className="font-semibold mb-2">People you may know</h3>
-//         <div className="space-y-4 mt-4">
-//           {users.map(user => (
-//             <div key={user.id} className="flex items-center justify-between">
-//               <img 
-//               // src={manish}
-//               src={user.profile_photo}
-              
-//                alt="Profile" className="rounded-full w-10 h-10" />
-//               <p className="text-sm ml-2 flex-1">{user.username}</p>
-//               <button 
-//                 className="bg-purple-600 text-white px-4 py-2 rounded"
-//                 onClick={() => handleFollow(user.id)}
-//               >
-//                 Follow
-//               </button>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//       <div className="bg-white shadow rounded p-4">
-//         <h3 className="font-semibold mb-2">Trends</h3>
-//         <ul className="space-y-2">
-//           <li className='flex items-center justify-between'>
-//             <a href="#" className="text-purple-600 text-sm">#Expressjs</a> 
-//             <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
-//           </li>
-//           <li className='flex items-center justify-between'>
-//             <a href="#" className="text-purple-600 text-sm">#Nextjs</a> 
-//             <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
-//           </li>
-//           <li className='flex items-center justify-between'>
-//             <a href="#" className="text-purple-600 text-sm">#ReactJs</a> 
-//             <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
-//           </li>
-//           <li className='flex items-center justify-between'>
-//             <a href="#" className="text-purple-600 text-sm">#GenerativeAI</a> 
-//             <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
-//           </li>
-//           <li className='flex items-center justify-between'>
-//             <a href="#" className="text-purple-600 text-sm">#Postman</a> 
-//             <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
-//           </li>
-//         </ul>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default RightSidebar;
-
-// import React, { useEffect, useState } from 'react';
-// import axios from 'axios';
-// import manish from '../components/manish.jpg';
-
-// import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
-
-// function RightSidebar() {
-//   const [users, setUsers] = useState([]);
-//   const token = localStorage.getItem('accessToken');
-//   const [image, setImage] = useState(null);
-//   const [profileImage, setProfileImage] = useState('path/to/manish/image'); // Replace with your image path
-
-//   useEffect(() => {
-//     // Fetch users from the API
-//     axios.get('http://127.0.0.1:8000/all-users/', {
-//       headers: {
-//         'Authorization': `Bearer ${token}`
-//       }
-//     })
-//     .then(response => {
-//       setUsers(response.data);
-//     })
-//     .catch(error => {
-//       console.error('There was an error fetching the users!', error);
-//     });
-//   }, [token]);
-
-//   const handleFollow = (userId) => {
-//     axios.post(`http://127.0.0.1:8000/api/users/${userId}/follow/`, {}, {
-//       headers: {
-//         'Authorization': `Bearer ${token}`
-//       }
-//     })
-//     .then(response => {
-//       console.log('Followed successfully:', response.data);
-//       // Optionally, update the UI to reflect the follow status
-//     })
-//     .catch(error => {
-//       console.error('There was an error following the user!', error);
-//     });
-//   };
-
-//   return (
-//     <div className="fixed top-0 right-0 w-full md:w-1/4 p-4 h-full overflow-hidden mt-28">
-//       <div className="bg-white shadow rounded p-4 mb-4 h-full overflow-y-auto">
-//         <h3 className="font-semibold mb-2">People you may know</h3>
-//         <div className="space-y-4 mt-4">
-//           {users.map(user => (
-//             <div key={user.id} className="flex items-center justify-between">
-//               <img 
-//                 // src={manish}
-//                 src={user.profile_photo}
-//                 alt="Profile" className="rounded-full w-10 h-10" 
-//               />
-//               <p className="text-sm ml-2 flex-1">{user.username}</p>
-//               <button 
-//                 className="bg-purple-600 text-white px-4 py-2 rounded"
-//                 onClick={() => handleFollow(user.id)}
-//               >
-//                 Follow
-//               </button>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default RightSidebar;
-
-// import React, { useEffect, useState } from 'react';
-// import axios from 'axios';
-// import manish from '../components/profile.jpg';
-
-// function RightSidebar() {
-//   const [users, setUsers] = useState([]);
-//   const token = localStorage.getItem('accessToken');
-//   const [image, setImage] = useState(null);
-//   const [profileImage, setProfileImage] = useState(manish);
-
-//   useEffect(() => {
-//     // Fetch users from the API
-//     axios.get('http://127.0.0.1:8000/all-users/', {
-//       headers: {
-//         'Authorization': `Bearer ${token}`
-//       }
-//     })
-//     .then(response => {
-//       setUsers(response.data);
-//     })
-//     .catch(error => {
-//       console.error('There was an error fetching the users!', error);
-//     });
-//   }, [token]);
-
-//   const handleFollow = (userId) => {
-//     axios.post(`http://127.0.0.1:8000/api/users/${userId}/follow/`, {}, {
-//       headers: {
-//         'Authorization': `Bearer ${token}`
-//       }
-//     })
-//     .then(response => {
-//       console.log('Followed successfully:', response.data);
-//       // Optionally, update the UI to reflect the follow status
-//     })
-//     .catch(error => {
-//       console.error('There was an error following the user!', error);
-//     });
-//   };
-
-//   return (
-//     <div className="fixed top-0 right-0 w-full md:w-1/4 p-4 h-full overflow-hidden mt-28">
-//       <div className="bg-white shadow rounded p-4 mb-4">
-//         <h3 className="font-semibold mb-2">People you may know</h3>
-//         <div className="space-y-4 mt-4">
-//           {users.map(user => (
-//             <div key={user.id} className="flex items-center justify-between">
-//               <img 
-//                 src={user.profile_photo || manish}
-//                 alt="Profile" 
-//                 className="rounded-full w-10 h-10" 
-//               />
-//               <p className="text-sm ml-2 flex-1">{user.username}</p>
-//               <button 
-//                 className="bg-purple-600 text-white px-4 py-2 rounded"
-//                 onClick={() => handleFollow(user.id)}
-//               >
-//                 Follow
-//               </button>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//       <div className="bg-white shadow rounded p-4">
-//         <h3 className="font-semibold mb-2">Trends</h3>
-//         <ul className="space-y-2">
-//           <li className='flex items-center justify-between'>
-//             <a href="#" className="text-purple-600 text-sm">#Expressjs</a> 
-//             <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
-//           </li>
-//           <li className='flex items-center justify-between'>
-//             <a href="#" className="text-purple-600 text-sm">#Nextjs</a> 
-//             <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
-//           </li>
-//           <li className='flex items-center justify-between'>
-//             <a href="#" className="text-purple-600 text-sm">#ReactJs</a> 
-//             <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
-//           </li>
-//           <li className='flex items-center justify-between'>
-//             <a href="#" className="text-purple-600 text-sm">#GenerativeAI</a> 
-//             <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
-//           </li>
-//           <li className='flex items-center justify-between'>
-//             <a href="#" className="text-purple-600 text-sm">#Postman</a> 
-//             <button className="bg-purple-600 text-white px-4 py-2 rounded">Explore</button>
-//           </li>
-//         </ul>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default RightSidebar;
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import manish from '../components/profile.jpg';
 
 function RightSidebar() {
-  const [users, setUsers] = useState([]);
-  const [followStatus, setFollowStatus] = useState({});
+  const [followingUsers, setFollowingUsers] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
+  const [loadingStatus, setLoadingStatus] = useState({});
   const token = localStorage.getItem('accessToken');
-  const [profileImage, setProfileImage] = useState(manish);
+  const userId = localStorage.getItem('userId'); // Assuming the user ID is stored in localStorage
 
   useEffect(() => {
-    // Fetch users from the API
+    if (!userId) return;
+
+    // Fetch the list of users the logged-in user is following
+    axios.get(`http://127.0.0.1:8000/api/users/${userId}/following/`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    .then(response => {
+      if (Array.isArray(response.data.following)) {
+        setFollowingUsers(response.data.following);
+      } else {
+        console.error('Following users data is not an array');
+      }
+    })
+    .catch(error => {
+      console.error('There was an error fetching the following users!', error);
+    });
+
+    // Fetch the list of all users
     axios.get('http://127.0.0.1:8000/all-users/', {
       headers: {
         'Authorization': `Bearer ${token}`
       }
     })
     .then(response => {
-      setUsers(response.data);
-      const initialFollowStatus = response.data.reduce((acc, user) => {
-        acc[user.id] = user.is_following; // assuming API returns if the user is followed
-        return acc;
-      }, {});
-      setFollowStatus(initialFollowStatus);
+      if (Array.isArray(response.data)) {
+        setAllUsers(response.data);
+      } else {
+        console.error('All users data is not an array');
+      }
     })
     .catch(error => {
-      console.error('There was an error fetching the users!', error);
+      console.error('There was an error fetching all users!', error);
     });
-  }, [token]);
+  }, [token, userId]);
 
-  const handleFollow = (userId) => {
-    const isFollowing = followStatus[userId];
-    const url = `http://127.0.0.1:8000/api/users/${userId}/${isFollowing ? 'unfollow' : 'follow'}/`;
+  const handleFollow = (targetUserId) => {
+    setLoadingStatus(prevState => ({
+      ...prevState,
+      [targetUserId]: true
+    }));
 
-    axios.post(url, {}, {
+    axios.post(`http://127.0.0.1:8000/api/users/${targetUserId}/follow/`, {}, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
     })
     .then(response => {
-      console.log(`${isFollowing ? 'Unfollowed' : 'Followed'} successfully:`, response.data);
-      setFollowStatus(prevState => ({
-        ...prevState,
-        [userId]: !isFollowing
-      }));
+      setFollowingUsers(prevState => [...prevState, response.data]);
     })
     .catch(error => {
-      console.error(`There was an error ${isFollowing ? 'unfollowing' : 'following'} the user!`, error);
+      console.error('There was an error following the user!', error);
+    })
+    .finally(() => {
+      setLoadingStatus(prevState => ({
+        ...prevState,
+        [targetUserId]: false
+      }));
     });
   };
+
+  const handleUnfollow = (targetUserId) => {
+    setLoadingStatus(prevState => ({
+      ...prevState,
+      [targetUserId]: true
+    }));
+
+    axios.post(`http://127.0.0.1:8000/api/users/${targetUserId}/unfollow/`, {}, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    .then(() => {
+      setFollowingUsers(prevState => prevState.filter(user => user.id !== targetUserId));
+    })
+    .catch(error => {
+      console.error('There was an error unfollowing the user!', error);
+    })
+    .finally(() => {
+      setLoadingStatus(prevState => ({
+        ...prevState,
+        [targetUserId]: false
+      }));
+    });
+  };
+
+  const isFollowing = (userId) => followingUsers.some(user => user.id === userId);
+  const followingUsernames = followingUsers.map(user => user.username);
 
   return (
     <div className="hidden lg:block fixed top-0 right-0 w-full lg:w-1/4 p-4 h-full overflow-hidden mt-32">
       <div className="bg-white shadow rounded p-4 mb-4 h-72 overflow-auto">
         <h3 className="font-semibold mb-2">People you may know</h3>
         <div className="space-y-4 mt-4">
-          {users.map(user => (
+          {allUsers.map(user => (
             <div key={user.id} className="flex items-center justify-between">
               <img 
                 src={user.profile_photo || manish}
@@ -343,20 +115,41 @@ function RightSidebar() {
                 className="rounded-full w-10 h-10" 
               />
               <p className="text-sm ml-2 flex-1">{user.username}</p>
-              <button 
-                className={`px-4 py-2 rounded ${followStatus[user.id] ? 'bg-red-600' : 'bg-purple-600'} text-white`}
-                style={{ width: '6rem' }}
-                onClick={() => handleFollow(user.id)}
-              >
-                {followStatus[user.id] ? 'Unfollow' : 'Follow'}
-              </button>
+              {isFollowing(user.id) ? (
+                <>
+                <button 
+                    className="text-sm text-green-600 px-4 py-2 rounded bg-green-600 text-white"
+                    // onClick={() => handleSendMessage(user.id)}
+                    disabled={loadingStatus[user.id]}
+                  >
+                    following
+                  </button>
+                  <button 
+                    className="text-sm text-green-600 px-4 py-2 m-1 rounded bg-black  text-white px-4 py-2 rounded bg-red-600 text-white"
+                    onClick={() => handleUnfollow(user.id)}
+                    disabled={loadingStatus[user.id]}
+                  >
+                    {loadingStatus[user.id] ? 'Loading...' : 'Unfollow'}
+                  </button>
+                
+                </>
+              ) : (
+                <button 
+                  className={`px-4 py-2 rounded bg-purple-600 text-white`}
+                  style={{ width: '6rem' }}
+                  onClick={() => handleFollow(user.id)}
+                  disabled={loadingStatus[user.id]}
+                >
+                  {loadingStatus[user.id] ? 'Loading...' : 'Follow'}
+                </button>
+              )}
             </div>
           ))}
         </div>
+
       </div>
     </div>
   );
 }
 
 export default RightSidebar;
-

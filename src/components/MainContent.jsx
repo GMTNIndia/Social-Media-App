@@ -301,7 +301,7 @@ function MainContent() {
         </div>
       </div>
       <div className="relative">
-        <button onClick={() => handleMenuToggle(post.id)} className="text-black">
+        <button onClick={() => handleMenuToggle(post.id)} className="text-black"style={{ fontSize: '24px' }} >
           &#x22EE;
         </button>
         {showMenu === post.id && (
