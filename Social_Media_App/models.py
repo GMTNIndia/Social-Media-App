@@ -22,6 +22,7 @@ class CustomUser(AbstractUser):
     following = models.ManyToManyField(
         "self", symmetrical=False, related_name="followers"
     )
+    blocked_users = models.ManyToManyField('self', related_name='blocked_by', blank=True)
 
     def __str__(self):
         return self.username
