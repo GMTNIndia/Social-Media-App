@@ -188,7 +188,7 @@ function SearchBar() {
   return (
     <section className="bg-gray-100 min-h-screen p-4 md:p-8 lg:p-12 mt-20">
       <form
-        className="flex flex-col items-center bg-white rounded-lg shadow-sm border border-solid border-zinc-200 p-6 max-w-full md:max-w-3xl lg:max-w-4xl mx-auto"
+        className="flex flex-col items-start bg-white rounded-lg shadow-sm border border-solid border-zinc-200 p-6 max-w-full md:max-w-3xl lg:max-w-4xl mx-auto ml-28"
         onSubmit={(e) => e.preventDefault()}
       >
         <label htmlFor="searchInput" className="sr-only">

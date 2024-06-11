@@ -155,7 +155,7 @@ const Container = styled.div`
     ${'' /* align-items: center; */}
     background-color: #873ADF;
     h3 {
-      color: black;
+      color: white !important;
       text-transform: uppercase;
       text-align: center;
     }
@@ -167,7 +167,7 @@ const Container = styled.div`
     justify-content: space-between;
     align-items: center;
     ${'' /* width:20px */}
-    height:60px;
+    height:61px;
     margin-bottom:30px;
     ${'' /* padding: 0 2rem; */}
 
@@ -180,7 +180,7 @@ const Container = styled.div`
       
       .username {
         h3 {
-          color: black;
+          color: white;
         }
       }
     }
