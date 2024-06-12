@@ -617,7 +617,7 @@ function Sidebar() {
           <p className="text-sm text-red-600 cursor-pointer" onClick={openFollowersModal}>{followers} Followers</p> {/* Display followers count */}
           <p className="text-sm text-blue-600 cursor-pointer" onClick={openFollowingModal}>{following} Following</p>
           {/* <p className="text-sm text-blue-600 cursor-pointer" >Blocklist</p> Display following count */}
-          <p className="text-sm text-blue-600 cursor-pointer" onClick={openBlocklistModal}>Blocklist</p>
+          <p className="text-sm text-black cursor-pointer" onClick={openBlocklistModal}>Blocklist</p>
           <p className="text-sm text-green-600">{posts} Posts</p>
           {/* <p className="text-sm text-green-600">{posts} Posts</p> Display posts count */}
         </div>
@@ -625,8 +625,8 @@ function Sidebar() {
 
       {showSecondModal && (
         <>
-          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-            <div className="relative w-auto my-6 mx-auto max-w-3xl">
+          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none  ">
+            <div className="relative  my-6 mx-auto " style={{width: "400px"}}>
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
                   <h3 className="text-lg font-semibold">Followers</h3>
@@ -663,7 +663,7 @@ function Sidebar() {
       {showThirdModal && (
         <>
           <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-            <div className="relative w-auto my-6 mx-auto max-w-3xl">
+            <div className="relative my-6 mx-auto max-w-3xl" style={{width: "400px"}}>
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
                   <h3 className="text-lg font-semibold">Following</h3>
@@ -697,11 +697,9 @@ function Sidebar() {
         </>
       )}
 
-
- {/* Blocklist modal */}
  {showforthModal && (
         <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-          <div className="relative w-auto my-6 mx-auto max-w-3xl">
+          <div className="relative  my-6 mx-auto max-w-3xl" style={{width: "400px"}}>
             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
               <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
                 <h3 className="text-lg font-semibold">Blocklist</h3>
@@ -732,8 +730,6 @@ function Sidebar() {
           </div>
         </div>
       )}
-      {/* {showforthModal && <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>} */}
-    {/* </div> */}
 
     </div>
   );

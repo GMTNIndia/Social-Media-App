@@ -661,8 +661,6 @@
 
 // export default Notifications;
 
-
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import manish from './components/profile.jpg';
@@ -686,10 +684,9 @@ const Notifications = () => {
         const sortedNotifications = response.data.reverse(); // Reverse order to display new notifications first
         setNotifications(sortedNotifications);
         sortedNotifications.forEach(notification => {
-          localStorage.setItem(`notification_user_${notification.id}`, notification.user);
+          // localStorage.setItem(`notification_user_${notification.id}`, notification.user);
+          localStorage.setItem( `notification${notification.id}`,notification.sender_id); // Store sender ID`notification_sender_${notification.id}`,
         });
-        console.log(sortedNotifications);
-        console.log(sortedNotifications);
       } catch (error) {
         console.error('Error fetching notifications:', error);
       } finally {
@@ -771,6 +768,7 @@ const NotificationItem = ({ notification, markAsRead, handleViewMessage, index }
           <p className="font-bold text-lg">{notification.title}</p>
           <p className="text-base">{notification.message}</p>
           <p className="text-sm text-gray-500">User ID: {notification.user}</p> {/* Displaying user ID */}
+          <p className="text-sm text-gray-500">Sender ID: {notification.sender_id}</p> {/* Displaying sender ID */}
           <p className="text-sm text-gray-500">Notification ID: {notification.id}</p> {/* Displaying notification ID */}
         </div>
       </a>

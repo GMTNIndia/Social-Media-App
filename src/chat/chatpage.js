@@ -340,19 +340,6 @@ const Chatpage = ({ currentChat }) => {
 export default Chatpage;
 
 
-{/* <input
-type="text"
-value={newMessage}
-onChange={(e) => setNewMessage(e.target.value)}
-placeholder="Type a message"
-className="flex-1 p-2 border border-gray-300 rounded-l-md"
-/>
-<button
-onClick={sendMessage}
-className="p-2 bg-blue-500 text-white border border-blue-500 rounded-r-md hover:bg-blue-600"
->
-Send
-</button> */}
 
 
 
