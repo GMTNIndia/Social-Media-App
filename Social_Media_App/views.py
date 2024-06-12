@@ -93,8 +93,10 @@ class NewsFeedView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         following_users = user.following.all()
+        blocked_users = user.blocked_users.all()
         queryset = Post.objects.filter(
-            user__in=following_users).order_by('-created_on')
+            user__in=following_users
+        ).exclude(user__in=blocked_users).order_by('-created_on')
         return queryset
 
 
@@ -324,6 +326,15 @@ class PostViewSet(viewsets.ViewSet):
         user = get_object_or_404(CustomUser, pk=pk)
         user_post_count = Post.objects.filter(user=user).count()
         return Response({'user': user.email, 'post_count': user_post_count})
+    
+    def get_queryset(self):
+        user = self.request.user
+        blocked_users = user.blocked_users.all()
+        queryset = Post.objects.all().exclude(user__in=blocked_users)
+        return queryset
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class NotificationListView(generics.ListAPIView):
