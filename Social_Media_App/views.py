@@ -447,26 +447,27 @@ def chat_between_users(request, user_id):
     except Exception as e:
         return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
     
-class BlockUserAPIView(APIView):
+class BlockUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request, user_id):
         user_to_block = get_object_or_404(CustomUser, id=user_id)
-        user = request.user
-        if user_to_block == user:
-            return Response({"detail": "You cannot block yourself."}, status=status.HTTP_400_BAD_REQUEST)
-        if user_to_block in user.blocked_users.all():
-            return Response({"detail": "User is already blocked."}, status=status.HTTP_400_BAD_REQUEST)
-        
-        user.blocked_users.add(user_to_block)
-        user.save()
-        return Response({"detail": f"User {user_to_block.username} blocked successfully."}, status=status.HTTP_200_OK)
+        request.user.blocked_users.add(user_to_block)
+        return Response({"detail": "User blocked successfully."}, status=status.HTTP_200_OK)
 
-class UnblockUserAPIView(APIView):
+class UnblockUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request, user_id):
         user_to_unblock = get_object_or_404(CustomUser, id=user_id)
+        request.user.blocked_users.remove(user_to_unblock)
+        return Response({"detail": "User unblocked successfully."}, status=status.HTTP_200_OK)
+    
+class BlockedUsersView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
         user = request.user
-        if user_to_unblock in user.blocked_users.all():
-            user.blocked_users.remove(user_to_unblock)
-            user.save()
-            return Response({"detail": f"User {user_to_unblock.username} unblocked successfully."}, status=status.HTTP_200_OK)
-        else:
-            return Response({"detail": "User is not blocked."}, status=status.HTTP_400_BAD_REQUEST)
+        blocked_users = user.blocked_users.all()
+        serializer = CustomUserSerializer(blocked_users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
