@@ -571,11 +571,12 @@ function MyComponent({ searchResults }) {
             <p className="mt-2">Followers: {followerCount}</p>
             {/* Follow/unfollow button */}
             <button
-              className={`mt-4 p-2 font-semibold ${followStates[selectedUser.id] ? 'bg-red-600 text-white' : 'bg-purple-700 text-gray-100'}`}
-              onClick={() => handleFollowToggle(selectedUser.id)}
-            >
-              {followStates[selectedUser.id] ? 'Unfollow' : 'Follow'}
-            </button>
+                className={`mt-4 p-2 font-semibold ${followStates[selectedUser.id] ? 'bg-red-600 text-white' : 'bg-purple-700 text-gray-100'}`}
+                style={{ width: '80px' }} // Set a fixed width for both buttons
+                onClick={() => handleFollowToggle(selectedUser.id)}
+              >
+                {followStates[selectedUser.id] ? 'Unfollow' : 'Follow'}
+              </button>
           </div>
         )}
       </Modal>
