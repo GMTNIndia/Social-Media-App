@@ -693,7 +693,8 @@ const Notifications = () => {
       } finally {
         setLoading(false);
       }
-    };
+    };fetchNotifications();
+  }, []);
 
 useEffect(() => {
   const fetchNotifications = async () => {
