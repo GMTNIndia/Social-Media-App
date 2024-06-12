@@ -609,6 +609,7 @@ import styled from "styled-components";
 import ChatContainer from "./chat/Chatcontainer";
 import Contacts from "./chat/Contact";
 import Welcome from "./chat/Welcome";
+import Chatpage from "./chat/chatpage";
 
 export default function Chat() {
   const navigate = useNavigate();
@@ -709,9 +710,22 @@ export default function Chat() {
 
   return (
     <Container>
-      <div className="chat-container">
+      {/* <div className="chat-container">
         <Contacts contacts={contacts} changeChat={handleChatChange} />
         {currentChat === undefined ? <Welcome /> : <ChatContainer currentChat={currentChat} />}
+        <Chatpage currentChat={currentChat} />
+      </div> */}
+
+      <div className="chat-container">
+        <Contacts contacts={contacts} changeChat={handleChatChange} />
+        {currentChat === undefined ? (
+          <Welcome />
+        ) : (
+          <>
+            <ChatContainer currentChat={currentChat} />
+            {/* <Chatpage currentChat={currentChat} /> */}
+          </>
+        )}
       </div>
     </Container>
   );

@@ -1,23 +1,23 @@
-
 // import React, { useState, useEffect } from 'react';
 // import axios from 'axios';
-// import manish from '../components/profile.jpg'; 
+// import manish from '../components/profile.jpg';
 // import Edit from '../components/Edit.png';
-// import FileUploader from './Drag'; 
-// import { useNavigate } from 'react-router-dom'; 
+// import FileUploader from './Drag';
+// import { useNavigate } from 'react-router-dom';
 
 // function Sidebar() {
 //   const [showModal, setShowModal] = useState(false);
-//   const [showSecondModal, setShowSecondModal] = useState(false); 
+//   const [showSecondModal, setShowSecondModal] = useState(false);
 //   const [image, setImage] = useState(null);
 //   const [profileImage, setProfileImage] = useState(manish); // Default image
 //   const [username, setUsername] = useState("");
 //   const [followers, setFollowers] = useState(0); // State for followers count
 //   const [posts, setPostCount] = useState(0);
+//   const [followersList, setFollowersList] = useState([]); // State for storing followers list
 //   const navigate = useNavigate(); // Initialize useNavigate hook
-  
+
 //   useEffect(() => {
-//     const fetchuserData = async () => {
+//     const fetchUserData = async () => {
 //       try {
 //         const userId = localStorage.getItem('userId'); // Assuming userId is stored in localStorage
 //         const response = await axios.get(`http://127.0.0.1:8000/api/users/${userId}`, {
@@ -27,7 +27,7 @@
 //         });
 //         if (response.data) {
 //           setUsername(response.data.username); // Update username state
-         
+
 //           if (response.data.profile_photo) {
 //             setProfileImage(response.data.profile_photo);
 //           }
@@ -61,8 +61,8 @@
 //           },
 //         });
 //         if (response.data) {
-//           setFollowers(response.data.followers.length); 
-//           console.log(response.data.followers.length);// Assuming the API returns an array of followers
+//           setFollowers(response.data.followers.length); // Assuming the API returns an array of followers
+//           setFollowersList(response.data.followers); // Store followers list
 //         }
 //       } catch (error) {
 //         console.error('Error fetching followers:', error.message);
@@ -70,28 +70,28 @@
 //     };
 
 //     const fetchPostCount = async () => {
-//             try {
-//               const userId = localStorage.getItem('userId'); // Assuming userId is stored in localStorage
-//               const response = await axios.get(`http://127.0.0.1:8000/api/posts/${userId}/post_count/`, {
-//                 headers: {
-//                   Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-//                 },
-//               });
-//               if (response.data) {
-//                 setPostCount(response.data.post_count);
-//                 console.log(response.data.post_count); // Log the post count
-//               }
-//             } catch (error) {
-//               console.error('Error fetching post count:', error.message);
-//             }
-//           };
+//       try {
+//         const userId = localStorage.getItem('userId'); // Assuming userId is stored in localStorage
+//         const response = await axios.get(`http://127.0.0.1:8000/api/posts/${userId}/post_count/`, {
+//           headers: {
+//             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+//           },
+//         });
+//         if (response.data) {
+//           setPostCount(response.data.post_count);
+//           console.log(response.data.post_count); // Log the post count
+//         }
+//       } catch (error) {
+//         console.error('Error fetching post count:', error.message);
+//       }
+//     };
 
-//     fetchuserData();
+//     fetchUserData();
 //     fetchProfileImage();
 //     fetchFollowers();
 //     fetchPostCount();
 //   }, []);
- 
+
 //   const handleImageChange = (e) => {
 //     e.preventDefault();
 //     e.stopPropagation();
@@ -161,7 +161,15 @@
 //     }
 //   };
 
-//   return ( 
+//   const openFollowersModal = () => {
+//     setShowSecondModal(true);
+//   };
+
+//   const closeFollowersModal = () => {
+//     setShowSecondModal(false);
+//   };
+
+//   return (
 //     <div className="hidden lg:block fixed top-0 left-0 w-full md:w-1/4 p-4 h-full overflow-hidden mt-32">
 //       <div className="bg-white shadow rounded p-4">
 //         <div className="flex justify-center">
@@ -246,16 +254,54 @@
 
 //         <h2 className="text-center mt-5 text-lg font-semibold">{username}</h2>
 //         <div className="flex justify-between space-x-4 mt-4">
-//           <p className="text-sm text-red-600">{followers} Followers</p> {/* Display followers count */}
-//           {/* Display followers count */}
-//           <p className="text-sm text-green-600">{posts} Posts</p>
+//           <p className="text-sm text-red-600 cursor-pointer" onClick={openFollowersModal}>{followers} Followers</p> {/* Display followers count */}
+//           <p className="text-sm text-green-600">{posts} Posts</p> {/* Display posts count */}
 //         </div>
 //       </div>
+
+//       {showSecondModal && (
+//         <>
+//           <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+//             <div className="relative w-auto my-6 mx-auto max-w-3xl">
+//               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+//                 <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+//                   <h3 className="text-lg font-semibold">Followers</h3>
+//                   <button
+//                     className="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+//                     onClick={closeFollowersModal}
+//                   >
+//                     <span className="text-black h-6 w-6 text-2xl block outline-none focus:outline-none">×</span>
+//                   </button>
+//                 </div>
+//                 <div className="relative p-6 flex-auto">
+//                   <ul>
+//                     {followersList.map((follower) => (
+//                       <li key={follower.id} className="py-2 border-b border-gray-200">{follower.username}</li>
+//                     ))}
+//                   </ul>
+//                 </div>
+//                 <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+//                   <button
+//                     className="bg-red-600 text-white active:bg-red-700 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+//                     type="button"
+//                     onClick={closeFollowersModal}
+//                   >
+//                     Close
+//                   </button>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+//         </>
+//       )}
 //     </div>
 //   );
 // }
 
 // export default Sidebar;
+
+
 
 
 
@@ -269,14 +315,18 @@ import { useNavigate } from 'react-router-dom';
 function Sidebar() {
   const [showModal, setShowModal] = useState(false);
   const [showSecondModal, setShowSecondModal] = useState(false);
+  const [showThirdModal, setShowThirdModal] = useState(false); 
+  const [showforthModal, setShowfourthModal] = useState(false);  
   const [image, setImage] = useState(null);
   const [profileImage, setProfileImage] = useState(manish); // Default image
   const [username, setUsername] = useState("");
   const [followers, setFollowers] = useState(0); // State for followers count
+  const [following, setFollowing] = useState(0); // State for following count
   const [posts, setPostCount] = useState(0);
   const [followersList, setFollowersList] = useState([]); // State for storing followers list
+  const [followingList, setFollowingList] = useState([]); // State for storing following list
   const navigate = useNavigate(); // Initialize useNavigate hook
-
+  const [blockedList, setBlockedList] = useState([]);
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -330,6 +380,23 @@ function Sidebar() {
       }
     };
 
+    const fetchFollowing = async () => {
+      try {
+        const userId = localStorage.getItem('userId');
+        const response = await axios.get(`http://127.0.0.1:8000/api/users/${userId}/following/`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          },
+        });
+        if (response.data) {
+          setFollowing(response.data.following.length);
+          setFollowingList(response.data.following);
+        }
+      } catch (error) {
+        console.error('Error fetching following:', error.message);
+      }
+    };
+
     const fetchPostCount = async () => {
       try {
         const userId = localStorage.getItem('userId'); // Assuming userId is stored in localStorage
@@ -346,10 +413,26 @@ function Sidebar() {
         console.error('Error fetching post count:', error.message);
       }
     };
+    const fetchBlockedList = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/users/blocked/', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          },
+        });
+        if (response.data) {
+          setBlockedList(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching blocklist:', error.message);
+      }
+    };
 
     fetchUserData();
     fetchProfileImage();
     fetchFollowers();
+    fetchFollowing();
+    fetchBlockedList();
     fetchPostCount();
   }, []);
 
@@ -430,6 +513,22 @@ function Sidebar() {
     setShowSecondModal(false);
   };
 
+  const openFollowingModal = () => {
+    setShowThirdModal(true);
+  };
+
+  const closeFollowingModal = () => {
+    setShowThirdModal(false);
+  };
+
+  const openBlocklistModal = () => {
+    setShowfourthModal(true);
+  };
+
+  const closeBlocklistModal = () => {
+    setShowfourthModal(false);
+  };
+
   return (
     <div className="hidden lg:block fixed top-0 left-0 w-full md:w-1/4 p-4 h-full overflow-hidden mt-32">
       <div className="bg-white shadow rounded p-4">
@@ -483,7 +582,7 @@ function Sidebar() {
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between p-6 border-t border-solid border-blueGray-200 rounded-b">
+                  <div className="flex items-center justify-between p-6 border-t border-solid border-blueGray-                    rounded-b">
                     <button
                       className="text-black-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                       type="button"
@@ -516,7 +615,11 @@ function Sidebar() {
         <h2 className="text-center mt-5 text-lg font-semibold">{username}</h2>
         <div className="flex justify-between space-x-4 mt-4">
           <p className="text-sm text-red-600 cursor-pointer" onClick={openFollowersModal}>{followers} Followers</p> {/* Display followers count */}
-          <p className="text-sm text-green-600">{posts} Posts</p> {/* Display posts count */}
+          <p className="text-sm text-blue-600 cursor-pointer" onClick={openFollowingModal}>{following} Following</p>
+          {/* <p className="text-sm text-blue-600 cursor-pointer" >Blocklist</p> Display following count */}
+          <p className="text-sm text-blue-600 cursor-pointer" onClick={openBlocklistModal}>Blocklist</p>
+          <p className="text-sm text-green-600">{posts} Posts</p>
+          {/* <p className="text-sm text-green-600">{posts} Posts</p> Display posts count */}
         </div>
       </div>
 
@@ -556,6 +659,82 @@ function Sidebar() {
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
         </>
       )}
+
+      {showThirdModal && (
+        <>
+          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+            <div className="relative w-auto my-6 mx-auto max-w-3xl">
+              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                  <h3 className="text-lg font-semibold">Following</h3>
+                  <button
+                    className="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                    onClick={closeFollowingModal}
+                  >
+                    <span className="text-black h-6 w-6 text-2xl block outline-none focus:outline-none">×</span>
+                  </button>
+                </div>
+                <div className="relative p-6 flex-auto">
+                  <ul>
+                    {followingList.map((followee) => (
+                      <li key={followee.id} className="py-2 border-b border-gray-200">{followee.username}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                  <button
+                    className="bg-red-600 text-white active:bg-red-700 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                    onClick={closeFollowingModal}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+        </>
+      )}
+
+
+ {/* Blocklist modal */}
+ {showforthModal && (
+        <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+          <div className="relative w-auto my-6 mx-auto max-w-3xl">
+            <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+              <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                <h3 className="text-lg font-semibold">Blocklist</h3>
+                <button
+                  className="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                  onClick={closeBlocklistModal}
+                >
+                  <span className="text-black h-6 w-6 text-2xl block outline-none focus:outline-none">×</span>
+                </button>
+              </div>
+              <div className="relative p-6 flex-auto">
+                <ul>
+                  {blockedList.map((user) => (
+                    <li key={user.id} className="py-2 border-b border-gray-200">{user.username}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                <button
+                  className="bg-red-600 text-white active:bg-red-700 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                  type="button"
+                  onClick={closeBlocklistModal}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* {showforthModal && <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>} */}
+    {/* </div> */}
+
     </div>
   );
 }
