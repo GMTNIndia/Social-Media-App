@@ -249,11 +249,33 @@ class ProfilePhotoUpdateSerializer(serializers.ModelSerializer):
 class NotificationSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
     profile_photo = serializers.ImageField(source='user.profile_photo', read_only=True)
+    sender_id = serializers.SerializerMethodField()
 
     class Meta:
         model = Notification
         fields = ['id', 'user', 'username', 'profile_photo', 'notification_type',
-                  'message', 'read', 'created_on']
+                  'message', 'sender_id', 'read', 'created_on']
+
+    def get_sender_id(self, obj):
+        if obj.notification_type == 'MSG':
+            # Get the associated message for the notification
+            try:
+                # Splitting the message to extract the sender's username
+                sender_username = obj.message.split(' ')[1]
+                # Getting the custom user model
+                User = get_user_model()
+                # Querying the custom user model to get the sender's ID
+                sender = User.objects.get(username=sender_username)
+                return sender.id
+            except IndexError:
+                # Handle the case where the message format is incorrect
+                return None
+            except User.DoesNotExist:
+                # Handle the case where the sender user does not exist
+                return None
+        return None
+
+
 
 
 class MessageSerializer(serializers.ModelSerializer):
