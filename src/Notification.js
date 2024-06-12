@@ -421,27 +421,33 @@ import './animation.css'; // Ensure you have this CSS file for custom animations
 const Notifications = ({ changeChat }) => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+// Update the fetchNotifications function in Notifications component
 
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        const token = localStorage.getItem('accessToken');
-        const response = await axios.get('http://127.0.0.1:8000/api/notifications/', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const sortedNotifications = response.data.reverse(); // Reverse order to display new notifications first
-        setNotifications(sortedNotifications);
-      } catch (error) {
-        console.error('Error fetching notifications:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+useEffect(() => {
+  const fetchNotifications = async () => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      const response = await axios.get('http://127.0.0.1:8000/api/notifications/', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const sortedNotifications = response.data.reverse(); // Reverse order to display new notifications first
+      
+      // Log notifications to verify profile_photo data
+      console.log('Fetched Notifications:', sortedNotifications);
+      
+      setNotifications(sortedNotifications);
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchNotifications();
-  }, []);
+  fetchNotifications();
+}, []);
+
 
   const markAsRead = async (id) => {
     try {
@@ -507,7 +513,7 @@ const NotificationItem = ({ notification, markAsRead, handleViewMessage, index }
     >
       <a href={notification.viewMessagesLink} className="flex items-center">
         <img
-          src={notification.profile_photo ? `http://127.0.0.1:8000${notification.profile_photo}` : manish}
+          src={notification.profile_photo ? `${notification.profile_photo}` : manish}
           alt="Notification Image"
           className="w-8 h-8 object-cover rounded-full mr-4"
         />
