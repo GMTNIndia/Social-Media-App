@@ -278,10 +278,6 @@ class NotificationSerializer(serializers.ModelSerializer):
 
 
 
-
-
-
-
 class MessageSerializer(serializers.ModelSerializer):
     profile_photo = serializers.SerializerMethodField()
 
