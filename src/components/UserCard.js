@@ -5,6 +5,15 @@
 
 // Modal.setAppElement('#root');
 
+// // Helper function to format the image URL correctly
+// const formatImageUrl = (url) => {
+//   const baseUrl = 'http://127.0.0.1:8000';
+//   if (url && !url.startsWith(baseUrl)) {
+//     return `${baseUrl}${url}`;
+//   }
+//   return url;
+// };
+
 // function CardProfile({ profile_photo, username, onClick }) {
 //   return (
 //     <section
@@ -13,7 +22,7 @@
 //     >
 //       <img
 //         loading="lazy"
-//         src={profile_photo ? `http://127.0.0.1:8000${profile_photo}` : defaultImage}
+//         src={profile_photo ? formatImageUrl(profile_photo) : defaultImage}
 //         alt={`Profile of ${username}`}
 //         className="rounded-full aspect-square w-[98px]"
 //       />
@@ -28,7 +37,7 @@
 //       <div className="flex gap-2.5 font-medium text-neutral-900">
 //         <img
 //           loading="lazy"
-//           src={profile_photo ? `http://127.0.0.1:8000${profile_photo}` : defaultImage}
+//           src={profile_photo ? formatImageUrl(profile_photo) : defaultImage}
 //           alt={`Profile of ${username}`}
 //           className="shrink-0 w-8 rounded-full aspect-square"
 //         />
@@ -137,7 +146,7 @@
 //     .catch(error => {
 //       console.error('There was an error fetching the post count!', error);
 //     });
-  
+
 //     // Fetch follower count for the selected user
 //     axios.get(`http://127.0.0.1:8000/users/${userId}/followers_count/`, {
 //       headers: {
@@ -151,14 +160,13 @@
 //     .catch(error => {
 //       console.error('There was an error fetching the follower count!', error);
 //     });
-  
+
 //     // Find the selected user from the users array
 //     const user = users.find(user => user.id === userId);
 //     console.log('Selected user:', user);
 //     setSelectedUser(user); // Update selectedUser with the fetched user data
 //     setModalIsOpen(true);
 //   };
-  
 
 //   const closeModal = () => {
 //     setModalIsOpen(false);
@@ -182,8 +190,6 @@
 //     overlay: {
 //       backgroundColor: 'rgba(0, 0, 0, 0.75)', // Dark overlay
 //     },
- 
-
 //   };
 
 //   return (
@@ -226,75 +232,65 @@
 //                   />
 //                 ))}
 //               </section>
-//               {/* {successMessage && (
-//                 <div className="p-4 mt-4 text-green-700 bg-green-100 rounded">
-//                   {successMessage}
-//                 </div>
-//               )} */}
 //             </section>
 //           </aside>
 //         </section>
 //       </main>
 
-    
 //       <Modal
-//   isOpen={modalIsOpen}
-//   onRequestClose={closeModal}
-//   contentLabel="User Profile_photo Modal"
-//   style={customStyles}
-// >
-//   {/* Check if selectedUser exists and render its details */}
-//   {selectedUser && (
-//     <div className="relative flex flex-col items-center p-4 bg-white rounded-lg">
-//       {/* Close button */}
-//       <button
-//         className="absolute top-0 right-0 p-2 text-gray-700 hover:text-gray-900"
-//         onClick={closeModal}
+//         isOpen={modalIsOpen}
+//         onRequestClose={closeModal}
+//         contentLabel="User Profile Photo Modal"
+//         style={customStyles}
 //       >
-//         <svg
-//           xmlns="http://www.w3.org/2000/svg"
-//           className="h-6 w-6"
-//           fill="none"
-//           viewBox="0 0 24 24"
-//           stroke="currentColor"
-//         >
-//           <path
-//             strokeLinecap="round"
-//             strokeLinejoin="round"
-//             strokeWidth="2"
-//             d="M6 18L18 6M6 6l12 12"
-//           />
-//         </svg>
-//       </button>
-//       {/* User details */}
-//       <img
-//   src={selectedUser.profile_photo ? `http://127.0.0.1:8000${selectedUser.profile_photo}` : defaultImage}
-//   alt={`Profile of ${selectedUser.username}`}
-//   className="rounded-full w-24 h-24 mb-4"
-// />
+//         {/* Check if selectedUser exists and render its details */}
+//         {selectedUser && (
+//           <div className="relative flex flex-col items-center p-4 bg-white rounded-lg">
+//             {/* Close button */}
+//             <button
+//               className="absolute top-0 right-0 p-2 text-gray-700 hover:text-gray-900"
+//               onClick={closeModal}
+//             >
+//               <svg
+//                 xmlns="http://www.w3.org/2000/svg"
+//                 className="h-6 w-6"
+//                 fill="none"
+//                 viewBox="0 0 24 24"
+//                 stroke="currentColor"
+//               >
+//                 <path
+//                   strokeLinecap="round"
+//                   strokeLinejoin="round"
+//                   strokeWidth="2"
+//                   d="M6 18L18 6M6 6l12 12"
+//                 />
+//               </svg>
+//             </button>
+//             {/* User details */}
+//             <img
+//               src={selectedUser.profile_photo ? formatImageUrl(selectedUser.profile_photo) : defaultImage}
+//               alt={`Profile of ${selectedUser.username}`}
+//               className="rounded-full w-24 h-24 mb-4"
+//             />
 
-//       <h2 className="text-xl font-semibold">{selectedUser.username}</h2>
-//       <p className="mt-2">Posts: {postCount}</p>
-//       <p className="mt-2">Followers: {followerCount}</p>
-//       {/* Follow/unfollow button */}
-//       <button
-//         className={`mt-4 p-2 font-semibold ${followStates[selectedUser.id] ? 'bg-red-600 text-white' : 'bg-purple-700 text-gray-100'}`}
-//         onClick={() => handleFollowToggle(selectedUser.id)}
-//       >
-//         {followStates[selectedUser.id] ? 'Unfollow' : 'Follow'}
-//       </button>
-//     </div>
-//   )}
-// </Modal>
-
-
-
+//             <h2 className="text-xl font-semibold">{selectedUser.username}</h2>
+//             <p className="mt-2">Posts: {postCount}</p>
+//             <p className="mt-2">Followers: {followerCount}</p>
+//             {/* Follow/unfollow button */}
+//             <button
+//               className={`mt-4 p-2 font-semibold ${followStates[selectedUser.id] ? 'bg-red-600 text-white' : 'bg-purple-700 text-gray-100'}`}
+//               onClick={() => handleFollowToggle(selectedUser.id)}
+//             >
+//               {followStates[selectedUser.id] ? 'Unfollow' : 'Follow'}
+//             </button>
+//           </div>
+//         )}
+//       </Modal>
 //     </div>
 //   );
 // }
 
 // export default MyComponent;
-
 
 
 import React, { useState, useEffect } from 'react';
@@ -316,7 +312,7 @@ const formatImageUrl = (url) => {
 function CardProfile({ profile_photo, username, onClick }) {
   return (
     <section
-      className="flex flex-col grow justify-center items-center px-2 py-4 mx-auto w-full text-xs rounded-lg border border-solid bg-zinc-200 border-zinc-200 max-md:mt-5"
+      className="flex flex-col justify-center items-center p-4 mx-auto text-xs rounded-lg border border-solid bg-zinc-200 border-zinc-200 cursor-pointer"
       onClick={onClick}
     >
       <img
@@ -332,7 +328,7 @@ function CardProfile({ profile_photo, username, onClick }) {
 
 function FriendSuggestion({ profile_photo, username, userId, isFollowed, onFollowToggle, onClick }) {
   return (
-    <div className="flex gap-5 justify-between mt-3.5 w-full" onClick={onClick}>
+    <div className="flex gap-5 justify-between mt-3.5 w-full cursor-pointer" onClick={onClick}>
       <div className="flex gap-2.5 font-medium text-neutral-900">
         <img
           loading="lazy"
@@ -497,19 +493,17 @@ function MyComponent({ searchResults }) {
         <section className="flex gap-5 max-md:flex-col max-md:gap-0">
           <section className="flex flex-col w-[74%] max-md:ml-0 max-md:w-full">
             <section className="flex flex-col grow max-md:mt-5 max-md:max-w-full">
-              <section className="flex flex-col px-4 pt-4 pb-20 mt-3.5 bg-white rounded-lg border border-solid shadow-sm border-zinc-200 max-md:max-w-full overflow-y-auto max-h-[500px]">
+              <section className="flex flex-col px-2 pt-6 pb-10 mt-3.5 bg-white rounded-lg border border-solid shadow-sm border-zinc-200 max-md:max-w-full overflow-y-auto max-h-[500px]">
                 <header className="max-md:max-w-full">
-                  <div className="flex gap-5 max-md:flex-col max-md:gap-0">
-                    <section className="grid grid-cols-4 gap-16">
-                      {searchResults.map((result, index) => (
-                        <CardProfile
-                          key={index}
-                          profile_photo={result.profile_photo}
-                          username={result.username}
-                          onClick={() => handleUserClick(result.id)}
-                        />
-                      ))}
-                    </section>
+                  <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-4 gap-6 max-md:flex-col max-md:gap-4">
+                    {searchResults.map((result, index) => (
+                      <CardProfile
+                        key={index}
+                        profile_photo={result.profile_photo}
+                        username={result.username}
+                        onClick={() => handleUserClick(result.id)}
+                      />
+                    ))}
                   </div>
                 </header>
               </section>
@@ -577,11 +571,12 @@ function MyComponent({ searchResults }) {
             <p className="mt-2">Followers: {followerCount}</p>
             {/* Follow/unfollow button */}
             <button
-              className={`mt-4 p-2 font-semibold ${followStates[selectedUser.id] ? 'bg-red-600 text-white' : 'bg-purple-700 text-gray-100'}`}
-              onClick={() => handleFollowToggle(selectedUser.id)}
-            >
-              {followStates[selectedUser.id] ? 'Unfollow' : 'Follow'}
-            </button>
+                className={`mt-4 p-2 font-semibold ${followStates[selectedUser.id] ? 'bg-red-600 text-white' : 'bg-purple-700 text-gray-100'}`}
+                style={{ width: '80px' }} // Set a fixed width for both buttons
+                onClick={() => handleFollowToggle(selectedUser.id)}
+              >
+                {followStates[selectedUser.id] ? 'Unfollow' : 'Follow'}
+              </button>
           </div>
         )}
       </Modal>
