@@ -482,3 +482,11 @@ class BlockedUsersView(APIView):
         blocked_users = user.blocked_users.all()
         serializer = CustomUserSerializer(blocked_users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class BlockStatusView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, user_id):
+        user_to_check = get_object_or_404(CustomUser, id=user_id)
+        is_blocked = request.user.blocked_users.filter(id=user_id).exists()
+        return Response({"blocked": is_blocked}, status=status.HTTP_200_OK)
