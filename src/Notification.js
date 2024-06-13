@@ -79,7 +79,7 @@ useEffect(() => {
   };
 
   const handleViewMessage = (chat_id) => {
-    window.location.href = `/chatdetaile`;
+    window.location.href = `/chat/${chat_id}`;
   };
 
   return (
@@ -124,16 +124,20 @@ const NotificationItem = ({ notification, markAsRead, handleViewMessage, index }
     >
       <a href={notification.viewMessagesLink} className="flex items-center">
         <img
+<<<<<<< HEAD
           src={notification.profile_photo ? `http://127.0.0.1:8000${notification.profile_photo}` : manish}
+=======
+          src={notification.profile_photo ? `${notification.profile_photo}` : manish}
+>>>>>>> ebfb288aa3c7084c121ea1e7eeeb469f2548a7f3
           alt="Notification Image"
           className="w-8 h-8 object-cover rounded-full mr-4"
         />
         <div className="text-left">
           <p className="font-bold text-lg">{notification.title}</p>
           <p className="text-base">{notification.message}</p>
-          <p className="text-sm text-gray-500">User ID: {notification.user}</p> {/* Displaying user ID */}
-          <p className="text-sm text-gray-500">Sender ID: {notification.sender_id}</p> {/* Displaying sender ID */}
-          <p className="text-sm text-gray-500">Notification ID: {notification.id}</p> {/* Displaying notification ID */}
+          {/* <p className="text-sm text-gray-500">User ID: {notification.user}</p> Displaying user ID */}
+          {/* <p className="text-sm text-gray-500">Sender ID: {notification.sender_id}</p> Displaying sender ID */}
+          {/* <p className="text-sm text-gray-500">Notification ID: {notification.id}</p> Displaying notification ID */}
         </div>
       </a>
       {notification.notification_type === 'MSG' && (
