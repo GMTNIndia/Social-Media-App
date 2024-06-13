@@ -61,6 +61,7 @@ urlpatterns = [
     path("api/users/<int:user_id>/block/", BlockUserView.as_view(), name="block-user"),
     path("api/users/<int:user_id>/unblock/", UnblockUserView.as_view(), name="unblock-user"),
     path("api/users/blocked/", BlockedUsersView.as_view(), name="blocked-users"),
+    path('block-status/<int:user_id>/', BlockStatusView.as_view(), name='block_status'),
     path("api/", include(router.urls)),
 ]
 

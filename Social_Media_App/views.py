@@ -463,7 +463,17 @@ class BlockUserView(APIView):
 
     def post(self, request, user_id):
         user_to_block = get_object_or_404(CustomUser, id=user_id)
+
+        # Check if the user is already blocked
+        if user_to_block in request.user.blocked_users.all():
+            return Response({"detail": "User is already blocked."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Add user to blocked list
         request.user.blocked_users.add(user_to_block)
+
+        # Decrease following count of the user who blocked
+        request.user.following.remove(user_to_block)
+
         return Response({"detail": "User blocked successfully."}, status=status.HTTP_200_OK)
 
 class UnblockUserView(APIView):
@@ -482,3 +492,11 @@ class BlockedUsersView(APIView):
         blocked_users = user.blocked_users.all()
         serializer = CustomUserSerializer(blocked_users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class BlockStatusView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, user_id):
+        user_to_check = get_object_or_404(CustomUser, id=user_id)
+        is_blocked = request.user.blocked_users.filter(id=user_id).exists()
+        return Response({"blocked": is_blocked}, status=status.HTTP_200_OK)
