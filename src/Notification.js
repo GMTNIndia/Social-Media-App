@@ -124,11 +124,7 @@ const NotificationItem = ({ notification, markAsRead, handleViewMessage, index }
     >
       <a href={notification.viewMessagesLink} className="flex items-center">
         <img
-<<<<<<< HEAD
           src={notification.profile_photo ? `http://127.0.0.1:8000${notification.profile_photo}` : manish}
-=======
-          src={notification.profile_photo ? `${notification.profile_photo}` : manish}
->>>>>>> ebfb288aa3c7084c121ea1e7eeeb469f2548a7f3
           alt="Notification Image"
           className="w-8 h-8 object-cover rounded-full mr-4"
         />
