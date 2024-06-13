@@ -64,8 +64,8 @@ function App() {
           <Route path="/" element={<PrivateRoute element={<Home />} />} />
           <Route path="/search" element={<PrivateRoute element={<SearchBar />} />} />
           <Route path="/chat" element={<PrivateRoute element={<Chat />} />} />
-          <Route path="/chat/:chatId" element={<PrivateRoute element={<Chat />} />} />
-          {/* <Route path="/chatdetaile" element={<PrivateRoute element={<Chatpage/>} />} /> */}
+          {/* <Route path="/chat/:chatId" element={<PrivateRoute element={<Chat />} />} /> */}
+          <Route path="/chatdetaile" element={<PrivateRoute element={<Chatpage/>} />} />
           <Route path="/notification" element={<PrivateRoute element={<Notifications />} />} />
           <Route path="/password-reset-confirm" element={<ResetPassword/>} />
           <Route path="/forgot-password" element={<ForgotPassword/>} />
