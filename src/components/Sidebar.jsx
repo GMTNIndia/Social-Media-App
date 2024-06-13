@@ -206,8 +206,9 @@ function RightSidebar() {
                   {/* <Menu.Button className="px-4 py-2 rounded bg-green-600 text-white">
                     Following
                   </Menu.Button> */}
-                  <Menu.Button className="px-4 py-2 rounded bg-green-700 text-white">
-                    Actions
+                  <Menu.Button className="px-2 py-2 rounded bg-blue-700 text-white" style={{ fontSize: '24px' }}  >
+                  {/* <i class="fa-solid fa-caret-up">^</i>    &#x22EE; */}
+                  &#x22EE;
                   </Menu.Button>
                   <Menu.Items className="absolute right-1 w-48 top-0 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg focus:outline-none">
                   <Menu.Item>

@@ -773,7 +773,9 @@ import Chatpage from "./chat/chatpage";
 export default function Chat() {
   const navigate = useNavigate();
   const [contacts, setContacts] = useState([]);
-  const [currentChat, setCurrentChat] = useState(undefined);
+  // const [currentChat, setCurrentChat] = useState();
+  const [currentChat, setCurrentChat] = useState([]);
+
   const ws = useRef(null);
 
   useEffect(() => {
@@ -877,14 +879,14 @@ export default function Chat() {
 
       <div className="chat-container">
         <Contacts contacts={contacts} changeChat={handleChatChange} />
-        {currentChat === undefined ? (
+        {/* {currentChat === undefined ? (
           <Welcome />
         ) : (
-          <>
+          <> */}
             <ChatContainer currentChat={currentChat} />
             {/* <Chatpage currentChat={currentChat} /> */}
-          </>
-        )}
+          {/* </>
+        )} */}
       </div>
     </Container>
   );
