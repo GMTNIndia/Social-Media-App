@@ -49,6 +49,7 @@ import ForgotPassword from './auth/Forgetpassword';
 import OtpVerificationPage from './auth/Otp';
 import ResetPassword from './auth/Reset-password';
 import Chatpage from './chat/chatpage';
+import Contacts from './chat/Contact';
 
 
 function App() {
@@ -63,7 +64,7 @@ function App() {
           <Route path="/" element={<PrivateRoute element={<Home />} />} />
           <Route path="/search" element={<PrivateRoute element={<SearchBar />} />} />
           <Route path="/chat" element={<PrivateRoute element={<Chat />} />} />
-          <Route path="/chat/:chatId" element={<PrivateRoute element={<Chatpage/>} />} />
+          <Route path="/chatdetaile" element={<PrivateRoute element={<Chatpage/>} />} />
           <Route path="/notification" element={<PrivateRoute element={<Notifications />} />} />
           <Route path="/password-reset-confirm" element={<ResetPassword/>} />
           <Route path="/forgot-password" element={<ForgotPassword/>} />
